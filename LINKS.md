@@ -1,0 +1,1 @@
+[Django API + админка с нуля [за 10 минут]](https://www.youtube.com/watch?v=TmDetBtk5rw&ab_channel=PashaIT)
