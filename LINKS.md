@@ -1,1 +1,2 @@
 [Django API + админка с нуля [за 10 минут]](https://www.youtube.com/watch?v=TmDetBtk5rw&ab_channel=PashaIT)
+[Создание Django API используя Django Rest Framework часть 1](https://webdevblog.ru/sozdanie-django-api-ispolzuya-django-rest-framework-apiview/)
