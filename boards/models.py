@@ -20,9 +20,16 @@ from django.conf import settings
 
 class Sprint(models.Model):
     """Спринты"""
-    name = models.CharField("Название спринта")
+    name = models.CharField("Название спринта", max_length=100, unique=True)
     aim = models.TextField("Цель спринта")
-    project = models.ForeignKey("Проект", on_delete=models.CASCADE)
+    project = models.ForeignKey(
+        "Project",
+        verbose_name="Проект",
+        on_delete=models.CASCADE)
+    startDate = models.DateField(
+        verbose_name="Начало спринта", null=True, blank=True)
+    finishDate = models.DateField(
+        verbose_name="Окончание спринта", null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -38,10 +45,16 @@ class ProjectSettings(models.Model):
     """Настройки проектов"""
     teamLimit = models.SmallIntegerField("Ограничение кол-ва участников")
     sprintLimit = models.SmallIntegerField("Ограничение длительности спринта")
+    project = models.OneToOneField(
+        "Project",
+        verbose_name="Проекты",
+        on_delete=models.CASCADE,
+        related_name="project"
+    )
 
     class Meta:
-        verbose_name = "ProjectSettings"
-        verbose_name_plural = "ProjectSettingss"
+        verbose_name = "Настроки проекта"
+        verbose_name_plural = "Настройки проектов"
 
     def __str__(self):
         return self.verbose_name
@@ -58,7 +71,11 @@ class Project(models.Model):
     settings = models.OneToOneField(
         ProjectSettings,
         on_delete=models.CASCADE,
-        primary_key=True
+        related_name="settings",
+        verbose_name="Настройки",
+        default=None,
+        null=True,
+        blank=True
     )
 
     class Meta:
@@ -96,7 +113,7 @@ class Status(models.Model):
         verbose_name="Доска",
         on_delete=models.CASCADE
     )
-    name = models.CharField("Название статуса")
+    name = models.CharField("Название статуса", max_length=100)
 
     def __str__(self):
         return self.name
@@ -133,7 +150,18 @@ class Task(models.Model):
     storyPoints = models.SmallIntegerField("Story Points", default=0)
     body = models.TextField("Тело задачи")
     board = models.ForeignKey(
-        Board, verbose_name="Доска", on_delete=models.CASCADE)
+        Board, verbose_name="Доска",
+        on_delete=models.CASCADE
+    )
+    status = models.ForeignKey(
+        Status, verbose_name="Статус",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        # TODO: добавить ограничение внешнего ключа
+        # https://overcoder.net/q/142430/django-foreignkey-limitchoicesto-%D1%80%D0%B0%D0%B2%D0%BD%D1%8B%D0%B9-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D1%83-%D1%82%D0%B5%D0%BA%D1%83%D1%89%D0%B5%D0%B3%D0%BE-%D0%BE%D0%B1%D1%8A%D0%B5%D0%BA%D1%82%D0%B0
+        # limit_choices_to={'board': "self.board.id"}
+    )
 
     def __str__(self):
         return self.body
@@ -171,5 +199,5 @@ class Comment(models.Model):
     class Meta:
         db_table = ''
         managed = True
-        verbose_name = 'Comment'
-        verbose_name_plural = 'Comments'
+        verbose_name = 'Комментарии'
+        verbose_name_plural = 'Комментарии'
