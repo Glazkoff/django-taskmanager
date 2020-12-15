@@ -57,7 +57,7 @@ class ProjectSettings(models.Model):
         verbose_name_plural = "Настройки проектов"
 
     def __str__(self):
-        return self.verbose_name
+        return str(self.id)
 
 
 class Project(models.Model):
@@ -153,6 +153,12 @@ class Task(models.Model):
         Board, verbose_name="Доска",
         on_delete=models.CASCADE
     )
+    sprint = models.ForeignKey(
+        Sprint,
+        verbose_name="Спринт",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True)
     status = models.ForeignKey(
         Status, verbose_name="Статус",
         on_delete=models.SET_NULL,
