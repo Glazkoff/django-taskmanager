@@ -77,6 +77,7 @@ class Project(models.Model):
         null=True,
         blank=True
     )
+    draft = models.BooleanField("Черновик", default=False)
 
     class Meta:
         db_table = 'Project'
