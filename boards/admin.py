@@ -6,6 +6,7 @@ class TeamInline(admin.TabularInline):
     model = Team
     extra = 0
     readonly_fields = ("id", "name")
+    classes = ("collapse",)
 
 
 class SettingsInline(admin.TabularInline):
