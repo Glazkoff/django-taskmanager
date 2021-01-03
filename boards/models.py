@@ -132,7 +132,7 @@ class Team(models.Model):
     leader = models.ForeignKey(
         User, verbose_name="Лидер", on_delete=models.SET_NULL, null=True)
     project = models.ForeignKey(
-        Project, verbose_name="Проект", on_delete=models.CASCADE)
+        Project, verbose_name="Проект", on_delete=models.CASCADE, related_name="teams")
     participants = models.ManyToManyField(
         User, verbose_name="Участники", related_name="Teams")
 
