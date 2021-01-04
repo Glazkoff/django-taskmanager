@@ -185,7 +185,8 @@ class Comment(models.Model):
     task = models.ForeignKey(
         Task,
         verbose_name="Задача",
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name="comments"
     )
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -198,7 +199,8 @@ class Comment(models.Model):
         verbose_name="Родительский комментарий",
         on_delete=models.SET_NULL,
         blank=True,
-        null=True)
+        null=True,
+        related_name="children")
 
     def __str__(self):
         return self.body

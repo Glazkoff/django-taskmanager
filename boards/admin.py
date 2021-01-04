@@ -16,6 +16,7 @@ class SettingsInline(admin.TabularInline):
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
+    actions = ['publish', 'unpublish']
     list_display = ("id", "name", "prefix", "leader", "settings", "draft")
     list_display_links = ("id", "name",)
     list_filter = ("leader", )
@@ -32,6 +33,30 @@ class ProjectAdmin(admin.ModelAdmin):
             ),
         }),
     )
+
+    def unpublish(self, request, queryset):
+        """Снять с публикации"""
+        row_update = queryset.update(draft=True)
+        if row_update == 1:
+            message_bit = "1 запись обновлена"
+        else:
+            message_bit = f"{row_update} записей было обновлено"
+        self.message_user(request, f"{message_bit}")
+
+    def publish(self, request, queryset):
+        """Снять с публикации"""
+        row_update = queryset.update(draft=False)
+        if row_update == 1:
+            message_bit = "1 запись обновлена"
+        else:
+            message_bit = f"{row_update} записей было обновлено"
+        self.message_user(request, f"{message_bit}")
+
+    publish.short_description = "Опубликовать"
+    publish.allowed_permissions = ("change",)
+
+    unpublish.short_description = "Снять с публикации"
+    unpublish.allowed_permissions = ("change",)
 
 
 @admin.register(Team)
