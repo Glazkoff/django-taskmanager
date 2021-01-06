@@ -1,11 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
+from projects.models import Project, Sprint
 
 
 class Employee(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    teamRole = models.CharField("Роль в командах", max_length=100)
+    teamRole = models.CharField("Роль в команде", max_length=100)
 
     def __str__(self):
         return self.teamRole
@@ -14,93 +15,6 @@ class Employee(models.Model):
         managed = True
         verbose_name = 'Сотрудник'
         verbose_name_plural = 'Сотрудники'
-
-# class User(models.Model):
-#     """Пользователи"""
-#     name = models.CharField("Имя", max_length=150)
-#     login = models.EmailField("Логин", max_length=254)
-#     password = models.CharField("Пароль", max_length=150)
-#     avatar = models.ImageField("Аватар", upload_to="users/")
-
-#     class Meta:
-#         verbose_name = "Пользователь"
-#         verbose_name_plural = "Пользователи"
-#         db_table = 'User'
-#         managed = True
-
-#     def __str__(self):
-#         return self.name
-
-
-class Sprint(models.Model):
-    """Спринты"""
-    name = models.CharField("Название спринта", max_length=100, unique=True)
-    aim = models.TextField("Цель спринта")
-    project = models.ForeignKey(
-        "Project",
-        verbose_name="Проект",
-        on_delete=models.CASCADE)
-    startDate = models.DateField(
-        verbose_name="Начало спринта", null=True, blank=True)
-    finishDate = models.DateField(
-        verbose_name="Окончание спринта", null=True, blank=True)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        db_table = 'Sprint'
-        managed = True
-        verbose_name = 'Спринт'
-        verbose_name_plural = 'Спринты'
-
-
-class ProjectSettings(models.Model):
-    """Настройки проектов"""
-    teamLimit = models.SmallIntegerField("Ограничение кол-ва участников")
-    sprintLimit = models.SmallIntegerField("Ограничение длительности спринта")
-    project = models.OneToOneField(
-        "Project",
-        verbose_name="Проекты",
-        on_delete=models.CASCADE,
-        related_name="project"
-    )
-
-    class Meta:
-        verbose_name = "Настроки проекта"
-        verbose_name_plural = "Настройки проектов"
-
-    def __str__(self):
-        return str(self.id)
-
-
-class Project(models.Model):
-    """Проекты"""
-    name = models.CharField("Название проекта", max_length=150)
-    prefix = models.CharField("Префикс", max_length=150)
-    leader = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        verbose_name="Лидер проекта",
-        on_delete=models.CASCADE)
-    settings = models.OneToOneField(
-        ProjectSettings,
-        on_delete=models.CASCADE,
-        related_name="settings",
-        verbose_name="Настройки",
-        default=None,
-        null=True,
-        blank=True
-    )
-    draft = models.BooleanField("Черновик", default=False)
-
-    class Meta:
-        db_table = 'Project'
-        managed = True
-        verbose_name = 'Проект'
-        verbose_name_plural = 'Проекты'
-
-    def __str__(self):
-        return self.name
 
 
 class Board(models.Model):

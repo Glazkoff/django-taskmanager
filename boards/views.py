@@ -1,27 +1,8 @@
-from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Board, Project, Task, Team
-from .serializers import BoardsInTeamSerializer, CreateTaskSerializer, ProjectListSerializer, ProjectDetailSerializer, TaskDetailSerializer, TaskListSerializer, TeamCreateSerializer, TeamsInProjectSerializer
-
-
-class ProjectListView(APIView):
-    """Вывод списка проектов"""
-
-    def get(self, request):
-        projects = Project.objects.filter(draft=False)
-        serializer = ProjectListSerializer(projects, many=True)
-        return Response(serializer.data)
-
-
-class ProjectDetailView(APIView):
-    """Вывод проекта"""
-
-    def get(self, request, pk):
-        project = Project.objects.get(id=pk, draft=False)
-        serializer = ProjectDetailSerializer(project)
-        return Response(serializer.data)
+from .models import Board, Task, Team
+from .serializers import BoardsInTeamSerializer, CreateTaskSerializer, TaskDetailSerializer, TaskListSerializer, TeamCreateSerializer, TeamsInProjectSerializer
 
 
 class AddTaskView(APIView):
