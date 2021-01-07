@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Project
-from boards.serializers import TeamSerializer
+from teams.serializers import TeamSerializer
 
 # Работа с проектами
 

@@ -1,27 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
-from projects.models import Project, Sprint
-
-
-class Employee(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    teamRole = models.CharField("Роль в команде", max_length=100)
-
-    def __str__(self):
-        return self.teamRole
-
-    class Meta:
-        managed = True
-        verbose_name = 'Сотрудник'
-        verbose_name_plural = 'Сотрудники'
+from projects.models import Sprint
+from teams.models import Team
 
 
 class Board(models.Model):
     """Доски"""
     name = models.CharField("Название", max_length=150)
     team = models.ForeignKey(
-        "Team",
+        Team,
         verbose_name="Команда",
         on_delete=models.CASCADE
     )
@@ -52,24 +40,6 @@ class Status(models.Model):
         managed = True
         verbose_name = 'Статус задач'
         verbose_name_plural = 'Статусы задач'
-
-
-class Team(models.Model):
-    """Команды"""
-    name = models.CharField("Название", max_length=150)
-    leader = models.ForeignKey(
-        User, verbose_name="Лидер", on_delete=models.SET_NULL, null=True)
-    project = models.ForeignKey(
-        Project, verbose_name="Проект", on_delete=models.CASCADE, related_name="teams")
-    participants = models.ManyToManyField(
-        User, verbose_name="Участники", related_name="Teams")
-
-    class Meta:
-        verbose_name = "Команда"
-        verbose_name_plural = "Команды"
-
-    def __str__(self):
-        return self.name
 
 
 class Task(models.Model):
