@@ -1,9 +1,12 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
+from django.utils.html import format_html, urlencode
+from django.urls import reverse
 from .models import Team, Employee
 from import_export.admin import ImportExportModelAdmin
 from import_export import resources
+
 
 # Переорпределение User
 
@@ -17,6 +20,15 @@ class EmployeeInline(admin.StackedInline):
 
 class MyUserAdmin(BaseUserAdmin):
     inlines = (EmployeeInline,)
+    list_display = ("id", "username", "first_name",
+                    "last_name", "is_staff", "employee_link")
+
+    def employee_link(self, obj):
+        url = (reverse("admin:teams_employee_changelist")
+               + "?"
+               + urlencode({"courses__id": f"{obj.id}"}))
+        return format_html('<a href="{}">{} user</a>', url, obj.employee)
+    employee_link.short_description = "Должность"
 
 
 admin.site.unregister(User)
