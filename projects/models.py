@@ -18,7 +18,7 @@ class ProjectSettings(models.Model):
         verbose_name_plural = "Настройки проектов"
 
     def __str__(self):
-        return str(self.id)
+        return str(f'Ограничения: участники - {self.teamLimit}, длительность - {self.sprintLimit} ')
 
 
 class Project(models.Model):
@@ -32,6 +32,7 @@ class Project(models.Model):
     settings = models.OneToOneField(
         ProjectSettings,
         on_delete=models.CASCADE,
+        parent_link=True,
         related_name="settings",
         verbose_name="Настройки",
         default=None,

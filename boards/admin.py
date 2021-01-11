@@ -42,9 +42,9 @@ class StatusResource(resources.ModelResource):
 class StatusAdmin(ImportExportModelAdmin):
     list_display = ("id", "board", "name")
     list_display_links = ("id", "name")
-    list_filter = ("board",)
+    list_filter = ("board", "name")
     search_fields = ["name", "board__name"]
-    readonly_fields = ("id", "board")
+    readonly_fields = ("id",)
     resource_class = StatusResource
 
 
@@ -64,7 +64,7 @@ class TaskAdmin(ImportExportModelAdmin):
     list_display_links = ("id", "body")
     list_filter = ("board", "executor",)
     search_fields = ["executor_username", "board__name"]
-    readonly_fields = ("id", "board")
+    readonly_fields = ("id",)
     resource_class = TaskResource
 
 
@@ -82,9 +82,9 @@ class CommentResource(resources.ModelResource):
 class CommentAdmin(ImportExportModelAdmin):
     list_display = ("id", "body", "author", "task", "parent")
     list_display_links = ("id", "body")
-    list_filter = ("author",)
+    list_filter = ("author", "task")
     search_fields = ["body", "author__username"]
-    readonly_fields = ("id", "author", "task", "parent")
+    readonly_fields = ("id",)
     resource_class = CommentResource
 
 

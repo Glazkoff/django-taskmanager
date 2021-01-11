@@ -17,6 +17,13 @@ class ProjectDetailView(APIView):
     """Вывод проекта"""
 
     def get(self, request, pk):
-        project = Project.objects.get(id=pk, draft=False)
-        serializer = ProjectDetailSerializer(project)
-        return Response(serializer.data)
+        try:
+            project = Project.objects.get(id=pk, draft=False)
+            serializer = ProjectDetailSerializer(project)
+            return Response(serializer.data)
+        except Project.DoesNotExist:
+            # запросу не соответствует ни один элемент.
+            return Response({})
+        except Project.MultipleObjectsReturned:
+            # запросу соответствует несколько элементов.
+            return Response({})

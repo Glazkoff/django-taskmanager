@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Project
-from teams.serializers import TeamSerializer
+from teams.serializers import TeamDetailSerializer
 
 # Работа с проектами
 
@@ -9,7 +9,7 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
     """Полный проект"""
     leader = serializers.SlugRelatedField(
         slug_field="username", read_only=True)
-    teams = TeamSerializer(many=True)
+    teams = TeamDetailSerializer(many=True)
 
     class Meta:
         model = Project

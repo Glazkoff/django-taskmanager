@@ -27,7 +27,8 @@ class SettingsInline(admin.TabularInline):
 
 class ProjectAdmin(ImportExportModelAdmin):
     actions = ['publish', 'unpublish']
-    list_display = ("id", "name", "prefix", "leader", "settings", "draft")
+    list_display = ("id", "name", "prefix", "leader",
+                    "settings_field", "draft")
     list_display_links = ("id", "name",)
     list_filter = ("leader", )
     search_fields = ["name", "leader__username", ]
@@ -44,6 +45,10 @@ class ProjectAdmin(ImportExportModelAdmin):
         }),
     )
     resource_class = ProjectResource
+
+    def settings_field(self, obj):
+        return str(ProjectSettings.objects.select_related("project").get(id=obj.id))
+    settings_field.short_description = "Настройки"
 
     def unpublish(self, request, queryset):
         """Снять с публикации"""

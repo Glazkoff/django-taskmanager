@@ -1,7 +1,19 @@
-from .serializers import TeamCreateSerializer, TeamsInProjectSerializer
+from .serializers import TeamCreateSerializer, TeamDetailSerializer, TeamsInProjectSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Team
+
+
+class TeamDetailView(APIView):
+    """Команды в проекте"""
+
+    def get(self, request, teamId):
+        try:
+            team = Team.objects.get(id=teamId)
+            serializer = TeamDetailSerializer(team)
+            return Response(serializer.data)
+        except Team.DoesNotExist:
+            return Response({})
 
 
 class TeamsInProjectView(APIView):
@@ -23,4 +35,4 @@ class TeamCreateView(APIView):
         team = TeamCreateSerializer(data=request.data)
         if team.is_valid():
             team.save()
-        return Response(status=201)
+        return Response({"message": "Команда успешно добавлена!"}, status=201)

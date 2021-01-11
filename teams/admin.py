@@ -22,13 +22,15 @@ class MyUserAdmin(BaseUserAdmin):
     inlines = (EmployeeInline,)
     list_display = ("id", "username", "first_name",
                     "last_name", "is_staff", "employee_link")
+    ordering = ("employee",)
 
     def employee_link(self, obj):
         url = (reverse("admin:teams_employee_changelist")
                + "?"
                + urlencode({"courses__id": f"{obj.id}"}))
-        return format_html('<a href="{}">{} user</a>', url, obj.employee)
+        return format_html('<a href="{}">{}</a>', url, obj.employee)
     employee_link.short_description = "Должность"
+    employee_link.admin_order_field = 'employee'
 
 
 admin.site.unregister(User)

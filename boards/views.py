@@ -10,9 +10,9 @@ class AddTaskView(APIView):
 
     def post(self, request):
         serializer = CreateTaskSerializer(data=request.data)
-        if serializer.is_valid:
+        if serializer.is_valid():
             serializer.save()
-            return Response(status=201)
+            return Response({"message": "Задача успешно добавлена"}, status=201)
         else:
             return Response(status=400)
 
@@ -20,7 +20,7 @@ class AddTaskView(APIView):
 class TaskDetailView(APIView):
     """Задача в таблице"""
 
-    def get(self, request, boardId, taskId):
+    def get(self, request, taskId):
         try:
             task = Task.objects.get(id=taskId)
             serializer = TaskDetailSerializer(task, many=False)
@@ -37,14 +37,6 @@ class TaskListView(APIView):
         tasks = Task.objects.filter(board=boardId)
         serializer = TaskListSerializer(tasks, many=True)
         return Response(serializer.data)
-
-    def post(self, request, boardId):
-        serializer = CreateTaskSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(board=boardId)
-            return Response(status=201)
-        else:
-            return Response(status=400)
 
 
 class BoardsInTeamView(APIView):

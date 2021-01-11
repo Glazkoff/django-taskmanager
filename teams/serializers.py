@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from .models import Team
 from rest_framework import serializers
 
@@ -11,8 +12,18 @@ class TeamCreateSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class TeamSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
+    """Вывод пользователя"""
+    class Meta:
+        model = User
+        fields = ("id", "username", "first_name",
+                  "last_name", "is_staff", "employee")
+
+
+class TeamDetailSerializer(serializers.ModelSerializer):
     """Вывод команды"""
+    participants = UserSerializer(many=True,  read_only=True)
+
     class Meta:
         model = Team
         fields = ("name", "leader", "project", "participants")

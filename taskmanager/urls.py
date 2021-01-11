@@ -24,7 +24,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('api/v1/', include('boards.urls')),
-    path('api/v1/', include('projects.urls'))
+    path('api/v1/', include('projects.urls')),
+    path('api/v1/', include('teams.urls'))
 ]
 
 if settings.DEBUG:

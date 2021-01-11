@@ -49,7 +49,7 @@ class CreateTaskSerializer(serializers.ModelSerializer):
     """Добавление задачи"""
     class Meta:
         model = Task
-        fields = ("executor", "storyPoints", "body")
+        fields = ("executor", "storyPoints", "body", "board")
 
     def create(self, validated_data):
         task = Task.objects.update_or_create(
