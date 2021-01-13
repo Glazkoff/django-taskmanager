@@ -18,7 +18,7 @@ class TeamDetailView(APIView):
 
 class TeamsInProjectView(APIView):
     """Команды в проекте"""
-
+    
     def get(self, request, projectId):
         try:
             teams = Team.objects.filter(project=projectId)

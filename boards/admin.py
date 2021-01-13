@@ -42,7 +42,7 @@ class StatusResource(resources.ModelResource):
 class StatusAdmin(ImportExportModelAdmin):
     list_display = ("id", "board", "name")
     list_display_links = ("id", "name")
-    list_filter = ("board", "name")
+    list_filter = ("board",)
     search_fields = ["name", "board__name"]
     readonly_fields = ("id",)
     resource_class = StatusResource

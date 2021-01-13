@@ -31,6 +31,8 @@ class TeamDetailSerializer(serializers.ModelSerializer):
 
 class TeamsInProjectSerializer(serializers.ModelSerializer):
     """Команды в проекте"""
+    participants = UserSerializer(many=True,  read_only=True)
+
     class Meta:
         model = Team
         exclude = ("project",)
