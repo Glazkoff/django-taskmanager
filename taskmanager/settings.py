@@ -25,7 +25,8 @@ SECRET_KEY = 'fbfo&$t@ca%61i5zc9!1m72+z71ndpn@g%t(3g#-939$&7!^24'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['task-tracker.nglazkov.ru','www.task-tracker.nglazkov.ru','127.0.0.1']
+ALLOWED_HOSTS = ['task-tracker.nglazkov.ru',
+                 'www.task-tracker.nglazkov.ru', '127.0.0.1']
 
 
 # Application definition
