@@ -8,6 +8,7 @@ djangorestframework = "*"
 django-import-export = "*"
 django = "*"
 django-extensions = "*"
+graphene-django = "*"
 
 [dev-packages]
 

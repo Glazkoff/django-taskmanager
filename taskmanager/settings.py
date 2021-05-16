@@ -41,9 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
     'rest_framework',
-    'django_extensions'
+    'django_extensions',
+    "django.contrib.staticfiles",
+    "graphene_django"
 ]
 
 MIDDLEWARE = [
@@ -137,3 +138,7 @@ STATIC_ROOT = 'static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+GRAPHENE = {
+    "SCHEMA": "taskmanager.schema.schema"
+}
