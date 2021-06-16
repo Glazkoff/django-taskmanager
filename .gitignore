@@ -95,9 +95,9 @@ ENV/
 # Rope project settings
 .ropeproject
 
-./frontend/node_modules/
-./frontend/node_modules
-./frontend/package-lock.json
+frontend/package-lock.json
+frontend/node_modules/
+frontend/node_modules
 
 # mkdocs documentation
 /site
