@@ -10,6 +10,7 @@ import { createHttpLink } from "apollo-link-http";
 import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "apollo-utilities";
 import { split } from "apollo-link";
+import vuetify from "./plugins/vuetify";
 
 Vue.config.productionTip = false;
 
@@ -25,7 +26,7 @@ const httpLink = new createHttpLink({
 
 // Создание websocket ссылки для Subscription
 const wsLink = new WebSocketLink({
-  uri: "ws://localhost:3000/graphql",
+  uri: "ws://localhost:8000/api/graphql",
   options: {
     reconnect: true
   }
@@ -62,5 +63,6 @@ new Vue({
   router,
   store,
   apolloProvider,
-  render: h => h(App)
+  vuetify,
+  render: (h) => h(App)
 }).$mount("#app");
