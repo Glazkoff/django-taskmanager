@@ -75,10 +75,47 @@ export default {
         { title: "Click Me 2" }
       ],
       statusList: [
-        { id: 1, title: "Запланированно" },
-        { id: 2, title: "В работе" },
-        { id: 3, title: "Завершено" },
-        { id: 4, title: "Бэклогч1" }
+        {
+          id: 1,
+          title: "Запланированно",
+          tasks: [
+            {
+              id: 1,
+              storyPoints: 1,
+              body: "Купить коту еды",
+              executor: 2,
+              sprint: 1,
+              status: 1,
+              comments: []
+            },
+            {
+              id: 2,
+              storyPoints: 1,
+              body: "Купить коту еды",
+              executor: 2,
+              sprint: 1,
+              status: 1,
+              comments: []
+            }
+          ]
+        },
+        {
+          id: 2,
+          title: "В работе",
+          tasks: [
+            {
+              id: 3,
+              storyPoints: 1,
+              body: "Прикол",
+              executor: 2,
+              sprint: 1,
+              status: 1,
+              comments: []
+            }
+          ]
+        },
+        { id: 3, title: "Завершено", tasks: [] },
+        { id: 4, title: "Бэклогч1", tasks: [] }
       ]
     };
   }

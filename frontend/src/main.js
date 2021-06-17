@@ -7,7 +7,7 @@ import VueApollo from "vue-apollo";
 import { ApolloClient } from "apollo-client";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { createHttpLink } from "apollo-link-http";
-import { WebSocketLink } from "apollo-link-ws";
+// import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "apollo-utilities";
 import { split } from "apollo-link";
 import vuetify from "./plugins/vuetify";
@@ -25,12 +25,13 @@ const httpLink = new createHttpLink({
 });
 
 // Создание websocket ссылки для Subscription
-const wsLink = new WebSocketLink({
-  uri: "ws://localhost:8000/api/graphql",
-  options: {
-    reconnect: true
-  }
-});
+// TODO: включить
+// const wsLink = new WebSocketLink({
+//   uri: "ws://localhost:8000/api/graphql",
+//   options: {
+//     reconnect: true
+//   }
+// });
 
 const link = split(
   // split based on operation type
@@ -41,7 +42,7 @@ const link = split(
       definition.operation === "subscription"
     );
   },
-  wsLink,
+  // wsLink,
   httpLink
 );
 

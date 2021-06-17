@@ -11,23 +11,83 @@
       flat
     >
       <v-banner color="white" sticky>{{ status.title }}</v-banner>
-      <Task
-        v-for="(t, index) in 4"
-        :key="t"
-        :class="{ 'mt-4': index == 0 }"
-      ></Task>
+      <draggable :list="status.tasks" draggable=".task" v-bind="dragOptions">
+        <transition-group type="transition" name="flip-list">
+          <Task
+            v-for="(task, index) in status.tasks"
+            :key="task.id"
+            :task="task"
+            :class="{ 'mt-4': index == 0 }"
+            class="task"
+          ></Task>
+        </transition-group>
+      </draggable>
     </v-card>
   </div>
 </template>
 
 <script>
 import Task from "@/components/main/Task.vue";
+import draggable from "vuedraggable";
 
 export default {
   name: "Desk",
   props: ["statusList"],
   components: {
-    Task
+    Task,
+    draggable
+  },
+  data() {
+    return {
+      tasks: [
+        {
+          id: 1,
+          storyPoints: 1,
+          body: "Купить коту еды",
+          executor: 2,
+          sprint: 1,
+          status: 1,
+          comments: []
+        },
+        {
+          id: 2,
+          storyPoints: 1,
+          body: "Купить коту еды",
+          executor: 2,
+          sprint: 1,
+          status: 1,
+          comments: []
+        },
+        {
+          id: 3,
+          storyPoints: 1,
+          body: "Купить коту еды",
+          executor: 2,
+          sprint: 1,
+          status: 1,
+          comments: []
+        },
+        {
+          id: 4,
+          storyPoints: 1,
+          body: "Купить коту еды",
+          executor: 2,
+          sprint: 1,
+          status: 1,
+          comments: []
+        }
+      ]
+    };
+  },
+  computed: {
+    dragOptions() {
+      return {
+        animation: 0,
+        group: "tasks",
+        disabled: false,
+        ghostClass: "ghost"
+      };
+    }
   }
 };
 </script>
@@ -51,5 +111,14 @@ html {
     max-height: 100%;
     overflow-y: auto;
   }
+}
+
+.flip-list-move {
+  transition: transform 0.5s;
+}
+
+.ghost {
+  opacity: 0.5;
+  background: #c8ebfb;
 }
 </style>

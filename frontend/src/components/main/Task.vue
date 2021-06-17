@@ -4,21 +4,23 @@
       <v-list-item-content>
         <v-container fluid>
           <v-row>
-            <div class="text-overline">PJ1-213</div>
+            <div class="text-overline">TEST-{{ task.id }}</div>
             <v-spacer></v-spacer>
             <v-chip class="" color="green" text-color="white">
-              <v-avatar left class="green darken-4"> 1 </v-avatar>
+              <v-avatar left class="green darken-4">
+                {{ task.storyPoints }}
+              </v-avatar>
               SP
             </v-chip>
           </v-row>
         </v-container>
-        <v-list-item-subtitle>Спринт #1</v-list-item-subtitle>
+        <v-list-item-subtitle>Спринт #{{ task.sprint }}</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
 
     <v-list-item>
       <v-list-item-content>
-        <v-list-item-title>Купить коту еды</v-list-item-title>
+        <v-list-item-title>{{ task.body }}</v-list-item-title>
         <!-- <v-list-item-subtitle>
           Secondary line text Lorem ipsum dolor sit amet,
         </v-list-item-subtitle> -->
@@ -34,7 +36,8 @@
 
 <script>
 export default {
-  name: "Task"
+  name: "Task",
+  props: ["task"]
 };
 </script>
 
