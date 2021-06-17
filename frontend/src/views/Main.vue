@@ -33,7 +33,6 @@
           <v-list-item-icon>
             <v-icon>{{ icon }}</v-icon>
           </v-list-item-icon>
-
           <v-list-item-content>
             <v-list-item-title>{{ text }}</v-list-item-title>
           </v-list-item-content>
@@ -41,44 +40,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-main>
-      <div id="status-list">
-        <v-card
-          height="100%"
-          class="mr-4"
-          min-width="400"
-          max-width="400"
-          tile
-          v-for="n in 4"
-          :key="n"
-        >
-          <v-card v-for="k in 4" :key="k" class="mb-4">
-            <v-list-item>
-              <v-list-item-content>
-                <v-list-item-title>Single-line item</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-
-            <v-list-item two-line>
-              <v-list-item-content>
-                <v-list-item-title>Two-line item</v-list-item-title>
-                <v-list-item-subtitle>Secondary text</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-
-            <v-list-item three-line>
-              <v-list-item-content>
-                <v-list-item-title>Three-line item</v-list-item-title>
-                <v-list-item-subtitle>
-                  Secondary line text Lorem ipsum dolor sit amet,
-                </v-list-item-subtitle>
-                <v-list-item-subtitle>
-                  consectetur adipiscing elit.
-                </v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-          </v-card>
-        </v-card>
-      </div>
+      <Desk :statusList="statusList"></Desk>
     </v-main>
     <v-footer>
       <v-card-text class="py-2 text-center">
@@ -90,8 +52,13 @@
 </template>
 
 <script>
+import Desk from "@/components/main/Desk.vue";
+
 export default {
   name: "Main",
+  components: {
+    Desk
+  },
   data() {
     return {
       drawer: true,
@@ -106,17 +73,16 @@ export default {
         { title: "Click Me" },
         { title: "Click Me" },
         { title: "Click Me 2" }
+      ],
+      statusList: [
+        { id: 1, title: "Запланированно" },
+        { id: 2, title: "В работе" },
+        { id: 3, title: "Завершено" },
+        { id: 4, title: "Бэклогч1" }
       ]
     };
   }
 };
 </script>
 
-<style lang="scss" scoped>
-#status-list {
-  display: flex;
-  flex-direction: row;
-  overflow-x: auto;
-  height: 100%;
-}
-</style>
+<style lang="scss" scoped></style>
