@@ -8,7 +8,7 @@ class Query(graphene.ObjectType):
     hello = graphene.String(default_value="Hi!")
     boards = graphene.List(BoardType)
     board = graphene.Field(BoardType, board_id=graphene.Int())
-    boards_in_team = graphene.List(BoardType, team_id=graphene.Int())
+    boards_in_team = graphene.List(BoardType, team_id=graphene.ID())
 
     def resolve_boards(self, info, **kwargs):
         return Board.objects.all()

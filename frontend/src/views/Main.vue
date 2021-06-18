@@ -55,16 +55,17 @@
 </template>
 
 <script>
-import Desk from "@/components/main/Desk.vue";
+import Desk from "@/components/main/boards/Desk.vue";
 
 export default {
   name: "Main",
   components: {
     Desk
   },
+
   data() {
     return {
-      drawer: true,
+      drawer: false,
       links: [
         // ["mdi-home", "Главная", "/"],
         ["mdi-bike-fast", "Доска1", "/order-delivery"],

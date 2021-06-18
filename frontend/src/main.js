@@ -7,10 +7,8 @@ import VueApollo from "vue-apollo";
 import { ApolloClient } from "apollo-client";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { createHttpLink } from "apollo-link-http";
-// import { WebSocketLink } from "apollo-link-ws";
-import { getMainDefinition } from "apollo-utilities";
-import { split } from "apollo-link";
 import vuetify from "./plugins/vuetify";
+import Cookies from "js-cookie";
 
 Vue.config.productionTip = false;
 
@@ -21,7 +19,7 @@ const cache = new InMemoryCache({
 
 // Создание ссылки для Apollo
 const httpLink = new createHttpLink({
-  uri: process.env.VUE_APP_GRAPHQL_URL
+  uri: "http://localhost:8000/api/graphql/"
 });
 
 // Создание websocket ссылки для Subscription
@@ -33,22 +31,12 @@ const httpLink = new createHttpLink({
 //   }
 // });
 
-const link = split(
-  // split based on operation type
-  ({ query }) => {
-    const definition = getMainDefinition(query);
-    return (
-      definition.kind === "OperationDefinition" &&
-      definition.operation === "subscription"
-    );
-  },
-  // wsLink,
-  httpLink
-);
-
 // Клиент Apollo
 const apolloClient = new ApolloClient({
-  link,
+  headers: {
+    "X-CSRFToken": Cookies.get("csrftoken")
+  },
+  link: httpLink,
   cache,
   connectToDevTools: true
 });

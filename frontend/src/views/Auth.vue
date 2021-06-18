@@ -1,10 +1,17 @@
 <template>
-  <div>Auth</div>
+  <div>Auth {{ this.$apollo.queries.boards.loading }} {{ boards }}</div>
 </template>
 
 <script>
+import { BOARDS } from "@/graphql/queries.js";
+
 export default {
-  name: "Auth"
+  name: "Auth",
+  apollo: {
+    boards: {
+      query: BOARDS
+    }
+  }
 };
 </script>
 

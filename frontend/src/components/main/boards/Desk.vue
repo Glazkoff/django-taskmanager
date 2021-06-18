@@ -42,8 +42,8 @@
 </template>
 
 <script>
-import Task from "@/components/main/Task.vue";
-import TaskDialog from "@/components/main/TaskDialog.vue";
+import Task from "@/components/main/boards/Task.vue";
+import TaskDialog from "@/components/main/boards/TaskDialog.vue";
 import draggable from "vuedraggable";
 
 export default {
@@ -56,45 +56,7 @@ export default {
   },
   data() {
     return {
-      addTaskDialog: false,
-      tasks: [
-        {
-          id: 1,
-          storyPoints: 1,
-          body: "Купить коту еды",
-          executor: 2,
-          sprint: 1,
-          status: 1,
-          comments: []
-        },
-        {
-          id: 2,
-          storyPoints: 1,
-          body: "Купить коту еды",
-          executor: 2,
-          sprint: 1,
-          status: 1,
-          comments: []
-        },
-        {
-          id: 3,
-          storyPoints: 1,
-          body: "Купить коту еды",
-          executor: 2,
-          sprint: 1,
-          status: 1,
-          comments: []
-        },
-        {
-          id: 4,
-          storyPoints: 1,
-          body: "Купить коту еды",
-          executor: 2,
-          sprint: 1,
-          status: 1,
-          comments: []
-        }
-      ]
+      addTaskDialog: false
     };
   },
   computed: {
@@ -109,7 +71,7 @@ export default {
   },
   methods: {
     addTask(statusId) {
-      console.log("!!!!");
+      console.log(statusId);
     }
   }
 };

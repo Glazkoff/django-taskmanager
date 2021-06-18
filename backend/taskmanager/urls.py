@@ -19,7 +19,7 @@ from django.conf.urls.static import static
 from django.urls import path
 from django.urls.conf import include
 from graphene_django.views import GraphQLView
-
+from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,7 +27,7 @@ urlpatterns = [
     path('api/v1/', include('boards.urls')),
     path('api/v1/', include('projects.urls')),
     path('api/v1/', include('teams.urls')),
-    path("api/graphql/", GraphQLView.as_view(graphiql=True)),
+    path("api/graphql/", csrf_exempt(GraphQLView.as_view(graphiql=True))),
 ]
 
 if settings.DEBUG:
