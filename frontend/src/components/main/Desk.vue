@@ -1,5 +1,6 @@
 <template>
   <div id="status-list">
+    <TaskDialog :dialog="addTaskDialog"></TaskDialog>
     <v-card
       class="mr-4 status-column"
       :class="{ 'ml-4': index == 0 }"
@@ -10,8 +11,21 @@
       :key="status.id"
       flat
     >
-      <v-banner color="white" sticky>{{ status.title }}</v-banner>
-      <draggable :list="status.tasks" draggable=".task" v-bind="dragOptions">
+      <v-banner color="white" sticky>
+        {{ status.title }}
+        <div>
+          <v-btn rounded text block class="mt-2" @click="addTask(status.id)">
+            Добавить задачу</v-btn
+          >
+        </div>
+      </v-banner>
+
+      <draggable
+        :list="status.tasks"
+        draggable=".task"
+        v-bind="dragOptions"
+        :empty-insert-threshold="100"
+      >
         <transition-group type="transition" name="flip-list">
           <Task
             v-for="(task, index) in status.tasks"
@@ -19,6 +33,7 @@
             :task="task"
             :class="{ 'mt-4': index == 0 }"
             class="task"
+            @updateStoryPoints="$emit('updateStoryPoints', $event)"
           ></Task>
         </transition-group>
       </draggable>
@@ -28,6 +43,7 @@
 
 <script>
 import Task from "@/components/main/Task.vue";
+import TaskDialog from "@/components/main/TaskDialog.vue";
 import draggable from "vuedraggable";
 
 export default {
@@ -35,10 +51,12 @@ export default {
   props: ["statusList"],
   components: {
     Task,
+    TaskDialog,
     draggable
   },
   data() {
     return {
+      addTaskDialog: false,
       tasks: [
         {
           id: 1,
@@ -87,6 +105,11 @@ export default {
         disabled: false,
         ghostClass: "ghost"
       };
+    }
+  },
+  methods: {
+    addTask(statusId) {
+      console.log("!!!!");
     }
   }
 };

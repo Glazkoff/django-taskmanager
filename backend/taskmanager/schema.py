@@ -1,8 +1,13 @@
 import graphene
+import boards.schema
 
 
-class Query(graphene.ObjectType):
-    hello = graphene.String(default_value="Hi!")
+class Query(boards.schema.Query,  graphene.ObjectType):
+    pass
 
 
-schema = graphene.Schema(query=Query)
+class Mutation(boards.schema.Mutation, graphene.ObjectType):
+    pass
+
+
+schema = graphene.Schema(query=Query, mutation=Mutation)

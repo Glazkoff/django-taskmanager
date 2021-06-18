@@ -40,7 +40,10 @@
       </v-list>
     </v-navigation-drawer>
     <v-main>
-      <Desk :statusList="statusList"></Desk>
+      <Desk
+        :statusList="statusList"
+        @updateStoryPoints="updateStoryPoints($event)"
+      ></Desk>
     </v-main>
     <v-footer>
       <v-card-text class="py-2 text-center">
@@ -118,6 +121,19 @@ export default {
         { id: 4, title: "Бэклогч1", tasks: [] }
       ]
     };
+  },
+  methods: {
+    updateStoryPoints(upd) {
+      this.statusList.forEach((status) => {
+        status.tasks.forEach((task) => {
+          if (task.id == upd.taskId) {
+            console.log("TASK: ", task);
+            task.storyPoints = upd.storyPoints;
+          }
+        });
+      });
+      console.log("!!", upd);
+    }
   }
 };
 </script>

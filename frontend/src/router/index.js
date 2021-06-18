@@ -1,12 +1,18 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Main from "../views/Main.vue";
+import Auth from "../views/Auth.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
+    name: "Auth",
+    component: Auth
+  },
+  {
+    path: "/team/:id",
     name: "Main",
     component: Main
   },
