@@ -1,5 +1,8 @@
 <template>
-  <div>Auth {{ this.$apollo.queries.boards.loading }} {{ boards }}</div>
+  <div>
+    <p>Auth {{ this.$apollo.queries.boards.loading }} {{ boards }}</p>
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>

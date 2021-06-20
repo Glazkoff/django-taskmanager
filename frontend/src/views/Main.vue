@@ -40,10 +40,11 @@
       </v-list>
     </v-navigation-drawer>
     <v-main>
-      <Desk
+      <router-view></router-view>
+      <!-- <Desk
         :statusList="statusList"
         @updateStoryPoints="updateStoryPoints($event)"
-      ></Desk>
+      ></Desk> -->
     </v-main>
     <v-footer>
       <v-card-text class="py-2 text-center">
@@ -55,13 +56,13 @@
 </template>
 
 <script>
-import Desk from "@/components/main/boards/Desk.vue";
+// import Desk from "@/components/main/boards/Desk.vue";
 
 export default {
   name: "Main",
-  components: {
-    Desk
-  },
+  // components: {
+  //   // Desk
+  // },
 
   data() {
     return {
@@ -77,49 +78,6 @@ export default {
         { title: "Click Me" },
         { title: "Click Me" },
         { title: "Click Me 2" }
-      ],
-      statusList: [
-        {
-          id: 1,
-          title: "Запланированно",
-          tasks: [
-            {
-              id: 1,
-              storyPoints: 1,
-              body: "Купить коту еды",
-              executor: 2,
-              sprint: 1,
-              status: 1,
-              comments: []
-            },
-            {
-              id: 2,
-              storyPoints: 1,
-              body: "Купить коту еды",
-              executor: 2,
-              sprint: 1,
-              status: 1,
-              comments: []
-            }
-          ]
-        },
-        {
-          id: 2,
-          title: "В работе",
-          tasks: [
-            {
-              id: 3,
-              storyPoints: 1,
-              body: "Прикол",
-              executor: 2,
-              sprint: 1,
-              status: 1,
-              comments: []
-            }
-          ]
-        },
-        { id: 3, title: "Завершено", tasks: [] },
-        { id: 4, title: "Бэклогч1", tasks: [] }
       ]
     };
   },
