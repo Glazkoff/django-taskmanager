@@ -5,7 +5,15 @@
     </v-row>
     <v-row v-else>
       <div id="status-list">
-        <TaskDialog :dialog="addTaskDialog"></TaskDialog>
+        <AddStatusDialog
+          :dialog="addStatusDialog"
+          @close="addStatusDialog = false"
+          @data-refresh="refreshData"
+        ></AddStatusDialog>
+        <AddTaskDialog
+          :dialog="addTaskDialog"
+          @close="addTaskDialog = false"
+        ></AddTaskDialog>
         <v-card
           class="mr-4 status-column"
           :class="{ 'ml-4': index == 0 }"
@@ -35,7 +43,6 @@
             draggable=".task"
             v-bind="dragOptions"
             :empty-insert-threshold="100"
-            @start="startUpdateStatus($event)"
             @end="endUpdateStatus($event)"
             @move="changeUpdateStatus($event)"
             :data-status_id="status.id"
@@ -46,11 +53,31 @@
                 :key="task.id"
                 :task="task"
                 class="task"
-                @updateStoryPoints="$apollo.queries.board.refresh()"
+                @updateStoryPoints="refreshData"
                 :data-task_id="task.id"
               ></Task>
             </transition-group>
           </draggable>
+        </v-card>
+        <v-card
+          class="mr-4 status-column"
+          min-width="400"
+          max-width="400"
+          tile
+          flat
+        >
+          <v-banner color="white" sticky class="mb-4 pt-2">
+            <!-- Новый статус задач -->
+            <v-btn
+              rounded
+              outlined
+              block
+              class="mt-5"
+              @click="openAddStatusDialog"
+            >
+              Добавить новый статус
+            </v-btn>
+          </v-banner>
         </v-card>
       </div>
     </v-row>
@@ -60,7 +87,8 @@
 <script>
 import { BOARD_BY_ID, UPDATE_STATUS } from "@/graphql/queries.js";
 import Task from "@/components/main/boards/Task.vue";
-import TaskDialog from "@/components/main/boards/TaskDialog.vue";
+import AddTaskDialog from "@/components/main/boards/AddTaskDialog.vue";
+import AddStatusDialog from "@/components/main/boards/AddStatusDialog.vue";
 import draggable from "vuedraggable";
 
 export default {
@@ -77,13 +105,15 @@ export default {
   },
   components: {
     Task,
-    TaskDialog,
+    AddTaskDialog,
+    AddStatusDialog,
     draggable
   },
   data() {
     return {
       routeId: this.$route.params.id,
-      addTaskDialog: false
+      addTaskDialog: false,
+      addStatusDialog: false
     };
   },
   computed: {
@@ -117,6 +147,7 @@ export default {
   methods: {
     addTask(statusId) {
       console.log(statusId);
+      this.addTaskDialog = true;
     },
     specificTasksSet(statusId) {
       if (this.board != null) {
@@ -131,19 +162,7 @@ export default {
         return [];
       }
     },
-    startUpdateStatus(event) {
-      console.log(
-        "START: ",
-        event.item.dataset.task_id,
-        event.from.parentNode.dataset.status_id
-      );
-    },
     endUpdateStatus(event) {
-      console.log(
-        "END: ",
-        event.item.dataset.task_id,
-        event.to.parentNode.dataset.status_id
-      );
       this.$apollo.mutate({
         mutation: UPDATE_STATUS,
         variables: {
@@ -151,6 +170,13 @@ export default {
           statusId: event.to.parentNode.dataset.status_id
         }
       });
+    },
+    openAddStatusDialog() {
+      this.addStatusDialog = true;
+    },
+    refreshData() {
+      this.$apollo.queries.board.refresh();
+      this.$apollo.queries.board.refetch();
     }
   }
 };

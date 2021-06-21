@@ -85,7 +85,9 @@
             </v-menu>
           </v-row>
         </v-container>
-        <v-list-item-subtitle>Спринт #{{ task.sprint }}</v-list-item-subtitle>
+        <v-list-item-subtitle>{{
+          task.sprint != null ? `Спринт "${task.sprint.name}"` : "Без спринта"
+        }}</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
 

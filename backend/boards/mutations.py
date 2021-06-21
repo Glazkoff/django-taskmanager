@@ -1,8 +1,8 @@
 import graphene
 from graphene_django.rest_framework.mutation import SerializerMutation
 
-from .types import TaskType
-from .models import Task, Status
+from .types import TaskType, StatusType
+from .models import Task, Status, Board
 from .serializers import CreateTaskSerializer
 
 
@@ -46,3 +46,19 @@ class UpdateStatusMutation(graphene.Mutation):
         task.save()
 
         return UpdateStatusMutation(task=task)
+
+
+class CreateStatusMutation(graphene.Mutation):
+    class Arguments:
+        board_id = graphene.ID(required=True)
+        status_name = graphene.String(required=True)
+
+    status = graphene.Field(StatusType)
+
+    @classmethod
+    def mutate(cls, root, info, board_id, status_name):
+        board = Board.objects.get(pk=board_id)
+        status = Status.objects.create(board=board, name=status_name)
+        status.save()
+
+        return CreateStatusMutation(status=status)

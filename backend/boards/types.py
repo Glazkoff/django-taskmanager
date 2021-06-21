@@ -1,5 +1,12 @@
 from graphene_django.types import DjangoObjectType
 from .models import Board, Task, Status, Comment
+from projects.models import Sprint
+
+
+class SprintType(DjangoObjectType):
+    class Meta:
+        model = Sprint
+        fields = '__all__'
 
 
 class BoardType(DjangoObjectType):

@@ -1,11 +1,13 @@
 import graphene
 from .models import Board, Task, Status, Comment
-from .types import BoardType, TaskType, StatusType, CommentType
-from .mutations import CreateTaskMutation, UpdateStoryPointsMutation, UpdateStatusMutation
+from .types import BoardType, TaskType, StatusType, CommentType, SprintType
+from .mutations import CreateTaskMutation, UpdateStoryPointsMutation, UpdateStatusMutation, CreateStatusMutation
 
 
 class Query(graphene.ObjectType):
     hello = graphene.String(default_value="Hi!")
+    sprints = graphene.List(SprintType)
+    sprint = graphene.Field(SprintType, sprint_id=graphene.ID())
     boards = graphene.List(BoardType)
     board = graphene.Field(BoardType, board_id=graphene.ID())
     boards_in_team = graphene.List(BoardType, team_id=graphene.ID())
@@ -24,6 +26,7 @@ class Mutation(graphene.ObjectType):
     create_task = graphene.Field(CreateTaskMutation)
     update_sp = UpdateStoryPointsMutation.Field()
     update_status = UpdateStatusMutation.Field()
+    create_status = CreateStatusMutation.Field()
 
 
 schema = graphene.Schema(query=Query,)

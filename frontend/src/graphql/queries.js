@@ -34,6 +34,10 @@ export const BOARD_BY_ID = gql`
           id
           name
         }
+        sprint {
+          id
+          name
+        }
       }
     }
   }
@@ -88,6 +92,17 @@ export const UPDATE_STATUS = gql`
         status {
           id
         }
+      }
+    }
+  }
+`;
+
+export const CREATE_STATUS = gql`
+  mutation ($boardId: ID!, $statusName: String!) {
+    createStatus(boardId: $boardId, statusName: $statusName) {
+      status {
+        id
+        name
       }
     }
   }
