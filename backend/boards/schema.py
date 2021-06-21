@@ -1,7 +1,7 @@
 import graphene
 from .models import Board, Task, Status, Comment
 from .types import BoardType, TaskType, StatusType, CommentType
-from .mutations import CreateTaskMutation
+from .mutations import CreateTaskMutation, UpdateStoryPointsMutation, UpdateStatusMutation
 
 
 class Query(graphene.ObjectType):
@@ -22,6 +22,8 @@ class Query(graphene.ObjectType):
 
 class Mutation(graphene.ObjectType):
     create_task = graphene.Field(CreateTaskMutation)
+    update_sp = UpdateStoryPointsMutation.Field()
+    update_status = UpdateStatusMutation.Field()
 
 
 schema = graphene.Schema(query=Query,)

@@ -31,7 +31,7 @@
                     class="darken-4"
                     :class="colorClassSP(task.storyPoints)"
                   >
-                    {{ task.storyPoints }}
+                    {{ task.storyPoints != 0 ? task.storyPoints : "-" }}
                   </v-avatar>
                   SP
                 </v-chip>
@@ -106,6 +106,8 @@
 </template>
 
 <script>
+import { UPDATE_SP } from "@/graphql/queries.js";
+
 export default {
   name: "Task",
   props: ["task"],
@@ -114,7 +116,7 @@ export default {
       storyPointMenu: false,
       storyPointEstimate: [
         {
-          number: "-",
+          number: 0,
           color: "grey"
         },
         {
@@ -146,6 +148,15 @@ export default {
   },
   methods: {
     updateStoryPoints(newStoryPoints) {
+      let newSp = newStoryPoints;
+      if (newSp == "-") newSp = 0;
+      this.$apollo.mutate({
+        mutation: UPDATE_SP,
+        variables: {
+          taskId: this.task.id,
+          storyPoints: newSp
+        }
+      });
       this.$emit("updateStoryPoints", {
         taskId: this.task.id,
         storyPoints: newStoryPoints

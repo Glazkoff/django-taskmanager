@@ -12,13 +12,12 @@
           min-width="400"
           max-width="400"
           tile
-          v-for="(status, index) in statusSet"
+          v-for="(status, index) in modernizedStatusSet"
           :key="status.id"
           flat
         >
-          {{ specificTasksSet(1) }}
-          <v-banner color="white" sticky>
-            {{ status.title }}
+          <v-banner color="white" sticky class="mb-4">
+            {{ status.name }}
             <div>
               <v-btn
                 rounded
@@ -31,22 +30,24 @@
               >
             </div>
           </v-banner>
-
           <draggable
             :list="status.tasks"
             draggable=".task"
             v-bind="dragOptions"
             :empty-insert-threshold="100"
-            @end="onCardDrop($event)"
+            @start="startUpdateStatus($event)"
+            @end="endUpdateStatus($event)"
+            @move="changeUpdateStatus($event)"
+            :data-status_id="status.id"
           >
             <transition-group type="transition" name="flip-list">
               <Task
-                v-for="(task, index) in specificTasksSet(status.id)"
+                v-for="task in specificTasksSet(status.id)"
                 :key="task.id"
                 :task="task"
-                :class="{ 'mt-4': index == 0 }"
                 class="task"
-                @updateStoryPoints="$emit('updateStoryPoints', $event)"
+                @updateStoryPoints="$apollo.queries.board.refresh()"
+                :data-task_id="task.id"
               ></Task>
             </transition-group>
           </draggable>
@@ -57,7 +58,7 @@
 </template>
 
 <script>
-import { BOARD_BY_ID } from "@/graphql/queries.js";
+import { BOARD_BY_ID, UPDATE_STATUS } from "@/graphql/queries.js";
 import Task from "@/components/main/boards/Task.vue";
 import TaskDialog from "@/components/main/boards/TaskDialog.vue";
 import draggable from "vuedraggable";
@@ -73,9 +74,6 @@ export default {
         };
       }
     }
-  },
-  mounted() {
-    console.log(this.routeId, this.board);
   },
   components: {
     Task,
@@ -100,50 +98,23 @@ export default {
     loading() {
       return this.$apollo.queries.board.loading;
     },
-    statusSet() {
-      let taskListsArr = [];
-      taskListsArr.push({
+    modernizedStatusSet() {
+      let newStatusSet = [];
+      newStatusSet.push({
         id: 0,
-        name: "Без статуса",
-        tasks: []
+        name: "Без статуса"
       });
-      if (this.board != null) {
-        this.board.statusSet.forEach((el) => {
-          let obj = {
-            id: el.id,
-            name: el.name,
-            tasks: []
-          };
-          taskListsArr.push(obj);
-        });
-        this.board.taskSet.forEach((task) => {
-          if (task.status != null) {
-            taskListsArr.forEach((statusObj) => {
-              if (statusObj.id == task.status.id) {
-                statusObj.tasks.push(task);
-              }
-            });
-          } else {
-            taskListsArr[0].tasks.push(task);
-          }
-
-          //   let taskListObj = taskListsArr.find((status) => {
-          //     status.id == task.status.id;
-          //   });
-          //   if (taskListObj != undefined) {
-          //     taskListObj.tasks.push(task);
-          //   } else {
-          //     console.log("АЛЯРМА!", task.status.id);
-          //   }
-        });
+      if (this.board != undefined) {
+        if (this.board.statusSet != undefined) {
+          this.board.statusSet.forEach((el) => {
+            newStatusSet.push(el);
+          });
+        }
       }
-      return taskListsArr;
+      return newStatusSet;
     }
   },
   methods: {
-    onCardDrop(event) {
-      console.log("!!!", event.added.element.id);
-    },
     addTask(statusId) {
       console.log(statusId);
     },
@@ -153,13 +124,33 @@ export default {
           if (el.status != null) {
             return el.status.id == statusId;
           } else {
-            console.log(statusId);
             return statusId == 0;
           }
         });
       } else {
         return [];
       }
+    },
+    startUpdateStatus(event) {
+      console.log(
+        "START: ",
+        event.item.dataset.task_id,
+        event.from.parentNode.dataset.status_id
+      );
+    },
+    endUpdateStatus(event) {
+      console.log(
+        "END: ",
+        event.item.dataset.task_id,
+        event.to.parentNode.dataset.status_id
+      );
+      this.$apollo.mutate({
+        mutation: UPDATE_STATUS,
+        variables: {
+          taskId: event.item.dataset.task_id,
+          statusId: event.to.parentNode.dataset.status_id
+        }
+      });
     }
   }
 };

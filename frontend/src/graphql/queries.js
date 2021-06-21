@@ -68,3 +68,27 @@ export const TEAMS_LIST = gql`
     }
   }
 `;
+
+export const UPDATE_SP = gql`
+  mutation ($taskId: ID!, $storyPoints: Int!) {
+    updateSp(taskId: $taskId, storyPoints: $storyPoints) {
+      task {
+        id
+        storyPoints
+      }
+    }
+  }
+`;
+
+export const UPDATE_STATUS = gql`
+  mutation ($taskId: ID!, $statusId: ID!) {
+    updateStatus(taskId: $taskId, statusId: $statusId) {
+      task {
+        id
+        status {
+          id
+        }
+      }
+    }
+  }
+`;
