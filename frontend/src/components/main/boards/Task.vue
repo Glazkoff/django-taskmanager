@@ -4,7 +4,7 @@
       <v-list-item-content>
         <v-container fluid>
           <v-row>
-            <div class="text-overline">TEST-{{ task.id }}</div>
+            <div class="text-overline">{{ prefix }}{{ task.id }}</div>
             <v-spacer></v-spacer>
             <!-- <v-chip class="" color="green" text-color="white">
               <v-avatar left class="green darken-4">
@@ -100,9 +100,9 @@
       </v-list-item-content>
     </v-list-item>
     <v-card-actions>
-      <v-btn rounded text>Подробнее</v-btn>
       <v-spacer></v-spacer>
-      <v-btn outlined rounded text>Button</v-btn>
+      <v-btn rounded text>Подробнее</v-btn>
+      <!-- <v-btn outlined rounded text>Button</v-btn> -->
     </v-card-actions>
   </v-card>
 </template>
@@ -112,40 +112,10 @@ import { UPDATE_SP } from "@/graphql/queries.js";
 
 export default {
   name: "Task",
-  props: ["task"],
+  props: ["task", "storyPointEstimate", "prefix"],
   data() {
     return {
-      storyPointMenu: false,
-      storyPointEstimate: [
-        {
-          number: 0,
-          color: "grey"
-        },
-        {
-          number: 1,
-          color: "blue"
-        },
-        {
-          number: 2,
-          color: "green"
-        },
-        {
-          number: 3,
-          color: "yellow"
-        },
-        {
-          number: 5,
-          color: "orange"
-        },
-        {
-          number: 8,
-          color: "red"
-        },
-        {
-          number: 13,
-          color: "pink"
-        }
-      ]
+      storyPointMenu: false
     };
   },
   methods: {

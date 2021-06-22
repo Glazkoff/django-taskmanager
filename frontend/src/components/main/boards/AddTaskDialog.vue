@@ -5,9 +5,47 @@
 
       <v-card-text>
         <v-text-field
-          label="Название статуса"
+          label="Описание задачи"
           :rules="[(value) => !!value || 'Поле обязательно']"
         ></v-text-field>
+        <!-- <v-text-field
+          label="Story points"
+          :rules="[(value) => !!value || 'Поле обязательно']"
+        ></v-text-field> -->
+        <v-select
+          v-model="task.storyPoints"
+          :items="storyPointEstimate"
+          item-text="number"
+          item-value="number"
+          label="Story points"
+          :rules="[(value) => !!value || 'Поле обязательно']"
+          return-object
+          outlined
+        ></v-select>
+        <v-text-field
+          label="Спринт"
+          :rules="[(value) => !!value || 'Поле обязательно']"
+        ></v-text-field>
+        <v-select
+          v-model="task.status"
+          :items="statusSet"
+          item-text="name"
+          item-value="id"
+          label="Статус"
+          :rules="[(value) => !!value || 'Поле обязательно']"
+          return-object
+          outlined
+        ></v-select>
+        <v-select
+          v-model="task.employee"
+          :items="employees"
+          item-text="user.firstName"
+          item-value="user.id"
+          label="Исполнитель задачи"
+          :rules="[(value) => !!value || 'Поле обязательно']"
+          return-object
+          outlined
+        ></v-select>
       </v-card-text>
 
       <v-divider></v-divider>
@@ -24,7 +62,7 @@
 <script>
 export default {
   name: "AddTaskDialog",
-  props: ["dialog"],
+  props: ["dialog", "storyPointEstimate", "statusSet", "employees", "sprints"],
   data() {
     return {
       task: {

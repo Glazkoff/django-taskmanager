@@ -13,6 +13,9 @@
         <AddTaskDialog
           :dialog="addTaskDialog"
           @close="addTaskDialog = false"
+          :story-point-estimate="storyPointEstimate"
+          :status-set="board.statusSet"
+          :employees="board.team.participants"
         ></AddTaskDialog>
         <v-card
           class="mr-4 status-column"
@@ -55,6 +58,8 @@
                 class="task"
                 @updateStoryPoints="refreshData"
                 :data-task_id="task.id"
+                :story-point-estimate="storyPointEstimate"
+                :prefix="board.team.project.prefix"
               ></Task>
             </transition-group>
           </draggable>
@@ -113,7 +118,37 @@ export default {
     return {
       routeId: this.$route.params.id,
       addTaskDialog: false,
-      addStatusDialog: false
+      addStatusDialog: false,
+      storyPointEstimate: [
+        {
+          number: 0,
+          color: "grey"
+        },
+        {
+          number: 1,
+          color: "blue"
+        },
+        {
+          number: 2,
+          color: "green"
+        },
+        {
+          number: 3,
+          color: "yellow"
+        },
+        {
+          number: 5,
+          color: "orange"
+        },
+        {
+          number: 8,
+          color: "red"
+        },
+        {
+          number: 13,
+          color: "pink"
+        }
+      ]
     };
   },
   computed: {

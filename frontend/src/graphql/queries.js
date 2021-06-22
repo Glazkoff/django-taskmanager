@@ -26,17 +26,40 @@ export const BOARD_BY_ID = gql`
         id
         name
       }
+      team {
+        id
+        name
+        leader {
+          id
+          firstName
+          lastName
+          username
+        }
+        participants {
+          id
+          teamRole
+          user {
+            id
+            username
+            firstName
+            lastName
+          }
+        }
+        project {
+          name
+          prefix
+          sprintSet {
+            id
+            name
+          }
+        }
+      }
       taskSet {
         id
         storyPoints
         body
         status {
           id
-          name
-        }
-        sprint {
-          id
-          name
         }
       }
     }
