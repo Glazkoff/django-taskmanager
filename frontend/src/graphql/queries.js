@@ -61,6 +61,14 @@ export const BOARD_BY_ID = gql`
         status {
           id
         }
+        sprint {
+          id
+          name
+        }
+        executor {
+          firstName
+          lastName
+        }
       }
     }
   }
@@ -126,6 +134,31 @@ export const CREATE_STATUS = gql`
       status {
         id
         name
+      }
+    }
+  }
+`;
+
+export const CREATE_TASK = gql`
+  mutation (
+    $body: String!
+    $executorId: ID
+    $sprintId: ID
+    $statusId: ID
+    $storyPoints: Int
+    $board: ID!
+  ) {
+    createTask(
+      executor: $executorId
+      body: $body
+      sprint: $sprintId
+      status: $statusId
+      storyPoints: $storyPoints
+      board: $board
+    ) {
+      task {
+        id
+        body
       }
     }
   }

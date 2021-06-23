@@ -6,12 +6,6 @@
           <v-row>
             <div class="text-overline">{{ prefix }}{{ task.id }}</div>
             <v-spacer></v-spacer>
-            <!-- <v-chip class="" color="green" text-color="white">
-              <v-avatar left class="green darken-4">
-                {{ task.storyPoints }}
-              </v-avatar>
-              SP
-            </v-chip> -->
             <v-menu
               v-model="storyPointMenu"
               bottom
@@ -87,6 +81,11 @@
         </v-container>
         <v-list-item-subtitle>{{
           task.sprint != null ? `Спринт "${task.sprint.name}"` : "Без спринта"
+        }}</v-list-item-subtitle>
+        <v-list-item-subtitle>{{
+          task.executor != null
+            ? `Исполнитель: ${task.executor.lastName} ${task.executor.firstName}`
+            : "Без исоплнителя"
         }}</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>

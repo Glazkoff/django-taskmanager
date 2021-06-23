@@ -1,14 +1,16 @@
+from django.contrib.auth.models import User
+from .serializers import CreateTaskSerializer
 import graphene
 from graphene_django.rest_framework.mutation import SerializerMutation
 
 from .types import TaskType, StatusType
 from .models import Task, Status, Board
-from .serializers import CreateTaskSerializer
+from projects.models import Sprint
 
 
-class CreateTaskMutation(SerializerMutation):
-    class Meta:
-        serializer_class = CreateTaskSerializer
+# class CreateTaskMutation(SerializerMutation):
+#     class Meta:
+#         serializer_class = CreateTaskSerializer
 
 
 class UpdateStoryPointsMutation(graphene.Mutation):
@@ -62,3 +64,27 @@ class CreateStatusMutation(graphene.Mutation):
         status.save()
 
         return CreateStatusMutation(status=status)
+
+
+class CreateTaskMutation(graphene.Mutation):
+    class Arguments:
+        body = graphene.String(required=True)
+        executor = graphene.ID()
+        sprint = graphene.ID()
+        status = graphene.ID()
+        board = graphene.ID()
+        story_points = graphene.Int()
+
+    task = graphene.Field(TaskType)
+
+    @classmethod
+    def mutate(cls, root, info, body, executor, sprint, status, story_points, board):
+        executorObj = User.objects.get(pk=executor)
+        sprintObj = Sprint.objects.get(pk=sprint)
+        statusObj = Status.objects.get(pk=status)
+        boardObj = Board.objects.get(pk=board)
+        task = Task.objects.create(executor=executorObj,
+                                   sprint=sprintObj, status=statusObj, body=body, storyPoints=story_points, board=boardObj)
+        task.save()
+
+        return CreateTaskMutation(task=task)

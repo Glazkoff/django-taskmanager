@@ -25,6 +25,7 @@ class Mutation(graphene.ObjectType):
     update_sp = UpdateStoryPointsMutation.Field()
     update_status = UpdateStatusMutation.Field()
     create_status = CreateStatusMutation.Field()
+    create_task = CreateTaskMutation.Field()
 
 
 schema = graphene.Schema(query=Query,)

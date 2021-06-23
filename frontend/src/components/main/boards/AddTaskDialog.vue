@@ -6,12 +6,9 @@
       <v-card-text>
         <v-text-field
           label="Описание задачи"
+          v-model="task.body"
           :rules="[(value) => !!value || 'Поле обязательно']"
         ></v-text-field>
-        <!-- <v-text-field
-          label="Story points"
-          :rules="[(value) => !!value || 'Поле обязательно']"
-        ></v-text-field> -->
         <v-select
           v-model="task.storyPoints"
           :items="storyPointEstimate"
@@ -19,13 +16,17 @@
           item-value="number"
           label="Story points"
           :rules="[(value) => !!value || 'Поле обязательно']"
-          return-object
           outlined
         ></v-select>
-        <v-text-field
+        <v-select
+          v-model="task.sprint"
+          :items="sprints"
+          item-text="name"
+          item-value="id"
           label="Спринт"
           :rules="[(value) => !!value || 'Поле обязательно']"
-        ></v-text-field>
+          outlined
+        ></v-select>
         <v-select
           v-model="task.status"
           :items="statusSet"
@@ -33,17 +34,15 @@
           item-value="id"
           label="Статус"
           :rules="[(value) => !!value || 'Поле обязательно']"
-          return-object
           outlined
         ></v-select>
         <v-select
-          v-model="task.employee"
+          v-model="task.executor"
           :items="employees"
           item-text="user.firstName"
           item-value="user.id"
           label="Исполнитель задачи"
           :rules="[(value) => !!value || 'Поле обязательно']"
-          return-object
           outlined
         ></v-select>
       </v-card-text>
@@ -60,20 +59,29 @@
 </template>
 
 <script>
+import { CREATE_TASK } from "@/graphql/queries.js";
+
 export default {
   name: "AddTaskDialog",
-  props: ["dialog", "storyPointEstimate", "statusSet", "employees", "sprints"],
+  props: [
+    "dialog",
+    "storyPointEstimate",
+    "statusSet",
+    "employees",
+    "sprints",
+    "newStatusId"
+  ],
   data() {
     return {
       task: {
-        id: 1,
-        storyPoints: 1,
+        storyPoints: null,
         body: "Купить коту еды",
-        executor: 2,
-        sprint: 1,
-        status: 1,
+        executor: null,
+        sprint: null,
+        status: this.newStatusId,
         comments: []
-      }
+      },
+      formLoading: false
     };
   },
   methods: {
@@ -81,7 +89,28 @@ export default {
       this.$emit("close");
     },
     onSave() {
-      this.$emit("close");
+      this.formLoading = true;
+      this.$apollo
+        .mutate({
+          mutation: CREATE_TASK,
+          variables: {
+            body: this.task.body,
+            sprintId: this.task.sprint,
+            executorId: this.task.executor,
+            storyPoints: this.task.storyPoints,
+            statusId: this.task.status,
+            board: this.$route.params.id
+          }
+        })
+        .then(() => {
+          this.formLoading = false;
+          this.$emit("refresh");
+          this.$emit("close");
+        })
+        .catch((err) => {
+          this.formLoading = false;
+          console.log(err);
+        });
     }
   }
 };

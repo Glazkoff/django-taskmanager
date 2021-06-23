@@ -11,11 +11,14 @@
           @data-refresh="refreshData"
         ></AddStatusDialog>
         <AddTaskDialog
-          :dialog="addTaskDialog"
           @close="addTaskDialog = false"
+          @refresh="refreshData"
+          :dialog="addTaskDialog"
           :story-point-estimate="storyPointEstimate"
           :status-set="board.statusSet"
           :employees="board.team.participants"
+          :sprints="board.team.project.sprintSet"
+          :new-status-id="addTaskStatusId"
         ></AddTaskDialog>
         <v-card
           class="mr-4 status-column"
@@ -116,6 +119,7 @@ export default {
   },
   data() {
     return {
+      addTaskStatusId: null,
       routeId: this.$route.params.id,
       addTaskDialog: false,
       addStatusDialog: false,
@@ -181,7 +185,7 @@ export default {
   },
   methods: {
     addTask(statusId) {
-      console.log(statusId);
+      this.addTaskStatusId = statusId;
       this.addTaskDialog = true;
     },
     specificTasksSet(statusId) {
