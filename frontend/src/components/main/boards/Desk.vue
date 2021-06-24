@@ -11,7 +11,7 @@
           @data-refresh="refreshData"
         ></AddStatusDialog>
         <AddTaskDialog
-          @close="addTaskDialog = false"
+          @close="closeTaskDialog"
           @refresh="refreshData"
           :dialog="addTaskDialog"
           :story-point-estimate="storyPointEstimate"
@@ -19,6 +19,8 @@
           :employees="board.team.participants"
           :sprints="board.team.project.sprintSet"
           :new-status-id="addTaskStatusId"
+          :editTaskObj="editTaskObj"
+          ref="taskDialog"
         ></AddTaskDialog>
         <v-card
           class="mr-4 status-column"
@@ -31,13 +33,25 @@
           flat
         >
           <v-banner color="white" sticky class="mb-4">
-            {{ status.name }}
+            <v-container>
+              <v-row>
+                {{ status.name }} <v-spacer></v-spacer>
+                <v-btn
+                  color="black"
+                  icon
+                  v-if="status.id !== 0"
+                  @click="deleteStatus(status.id)"
+                  ><v-icon>mdi-close</v-icon>
+                </v-btn>
+              </v-row>
+            </v-container>
             <div>
               <v-btn
                 rounded
                 text
                 block
                 class="mt-2"
+                :class="{ 'mt-5': status.id == 0 }"
                 @click="addTask(status.id)"
               >
                 Добавить задачу</v-btn
@@ -60,6 +74,7 @@
                 :task="task"
                 class="task"
                 @updateStoryPoints="refreshData"
+                @editTask="startEditTask($event)"
                 :data-task_id="task.id"
                 :story-point-estimate="storyPointEstimate"
                 :prefix="board.team.project.prefix"
@@ -93,7 +108,11 @@
 </template>
 
 <script>
-import { BOARD_BY_ID, UPDATE_STATUS } from "@/graphql/queries.js";
+import {
+  BOARD_BY_ID,
+  UPDATE_STATUS,
+  DELETE_STATUS
+} from "@/graphql/queries.js";
 import Task from "@/components/main/boards/Task.vue";
 import AddTaskDialog from "@/components/main/boards/AddTaskDialog.vue";
 import AddStatusDialog from "@/components/main/boards/AddStatusDialog.vue";
@@ -111,6 +130,12 @@ export default {
       }
     }
   },
+  beforeRouteUpdate(to, from, next) {
+    this.$apollo.queries.board.refetch({
+      boardId: to.params.id
+    });
+    next();
+  },
   components: {
     Task,
     AddTaskDialog,
@@ -119,6 +144,7 @@ export default {
   },
   data() {
     return {
+      editTaskObj: null,
       addTaskStatusId: null,
       routeId: this.$route.params.id,
       addTaskDialog: false,
@@ -184,7 +210,33 @@ export default {
     }
   },
   methods: {
+    closeTaskDialog() {
+      this.editTaskId = null;
+      this.addTaskDialog = false;
+    },
+    startEditTask(taskId) {
+      let taskObj = this.board.taskSet.find((el) => el.id === taskId);
+      this.editTaskObj = taskObj;
+      this.$refs.taskDialog.setValues(taskObj);
+      this.addTaskDialog = true;
+    },
+    deleteStatus(statusId) {
+      this.$apollo
+        .mutate({
+          mutation: DELETE_STATUS,
+          variables: {
+            statusId
+          }
+        })
+        .then(() => {
+          this.refreshData();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     addTask(statusId) {
+      this.$refs.taskDialog.setStatusValue(statusId);
       this.addTaskStatusId = statusId;
       this.addTaskDialog = true;
     },

@@ -100,7 +100,7 @@
     </v-list-item>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn rounded text>Подробнее</v-btn>
+      <v-btn rounded text @click="onTaskEditStart">Редактировать</v-btn>
       <!-- <v-btn outlined rounded text>Button</v-btn> -->
     </v-card-actions>
   </v-card>
@@ -142,6 +142,9 @@ export default {
       } else {
         return "";
       }
+    },
+    onTaskEditStart() {
+      this.$emit("editTask", this.task.id);
     }
   }
 };

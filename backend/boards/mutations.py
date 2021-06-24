@@ -66,6 +66,20 @@ class CreateStatusMutation(graphene.Mutation):
         return CreateStatusMutation(status=status)
 
 
+class DeleteStatusMutation(graphene.Mutation):
+    class Arguments:
+        status_id = graphene.ID(required=True)
+
+    ok = graphene.Boolean()
+
+    @classmethod
+    def mutate(cls, root, info, status_id):
+        status = Status.objects.get(pk=status_id)
+        status.delete()
+
+        return cls(ok=True)
+
+
 class CreateTaskMutation(graphene.Mutation):
     class Arguments:
         body = graphene.String(required=True)
@@ -88,3 +102,34 @@ class CreateTaskMutation(graphene.Mutation):
         task.save()
 
         return CreateTaskMutation(task=task)
+
+
+class UpdateTaskMutation(graphene.Mutation):
+    class Arguments:
+        task_id = graphene.ID(required=True)
+        body = graphene.String(required=True)
+        executor = graphene.ID()
+        sprint = graphene.ID()
+        status = graphene.ID()
+        story_points = graphene.Int()
+
+    task = graphene.Field(TaskType)
+
+    @classmethod
+    def mutate(cls, root, info, body, story_points, task_id, sprint=None, executor=None, status=None):
+        task = Task.objects.get(pk=task_id)
+
+        if (status != None):
+            statusObj = Status.objects.get(pk=status)
+            task.status = statusObj
+        if (executor != None):
+            executorObj = User.objects.get(pk=executor)
+            task.executor = executorObj
+        if (sprint != None):
+            sprintObj = Sprint.objects.get(pk=sprint)
+            task.sprint = sprintObj
+        task.body = body
+        task.storyPoints = story_points
+        task.save()
+
+        return UpdateTaskMutation(task=task)

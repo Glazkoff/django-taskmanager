@@ -20,10 +20,11 @@
               <td>{{ team.name }}</td>
               <td>
                 <v-btn
-                  v-for="board in team.boardSet"
+                  v-for="(board, index) in team.boardSet"
                   :key="board.id"
                   color="primary"
                   class="mb-2"
+                  :class="{ 'mt-2': index == 0 }"
                   :to="`/board/${board.id}`"
                   >Перейти к доске "{{ board.name }}"</v-btn
                 >

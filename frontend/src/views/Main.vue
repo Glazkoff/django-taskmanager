@@ -24,17 +24,15 @@
         <div>Никита Глазков</div>
         <div>john@vuetifyjs.com</div>
       </v-sheet>
-
       <v-divider></v-divider>
-
-      <v-list>
-        <v-subheader>Доски</v-subheader>
-        <v-list-item v-for="[icon, text] in links" :key="icon" link>
+      <v-list v-for="team in teams" :key="team.id">
+        <v-subheader>{{ team.name }}</v-subheader>
+        <v-list-item v-for="board in team.boardSet" :key="board.id" link>
           <v-list-item-icon>
-            <v-icon>{{ icon }}</v-icon>
+            <v-icon>mdi-heart</v-icon>
           </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>{{ text }}</v-list-item-title>
+          <v-list-item-content @click="moveToBoard(board.id)">
+            <v-list-item-title>{{ board.name }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -56,14 +54,18 @@
 </template>
 
 <script>
-// import Desk from "@/components/main/boards/Desk.vue";
+import { TEAMS_LIST } from "@/graphql/queries.js";
 
 export default {
   name: "Main",
   // components: {
   //   // Desk
   // },
-
+  apollo: {
+    teams: {
+      query: TEAMS_LIST
+    }
+  },
   data() {
     return {
       drawer: false,
@@ -92,6 +94,12 @@ export default {
         });
       });
       console.log("!!", upd);
+    },
+    moveToBoard(boardId) {
+      let boardPath = `/board/${boardId}`;
+      if (this.$route.path !== boardPath) {
+        this.$router.push(boardPath);
+      }
     }
   }
 };

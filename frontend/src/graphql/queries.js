@@ -66,6 +66,7 @@ export const BOARD_BY_ID = gql`
           name
         }
         executor {
+          id
           firstName
           lastName
         }
@@ -155,6 +156,39 @@ export const CREATE_TASK = gql`
       status: $statusId
       storyPoints: $storyPoints
       board: $board
+    ) {
+      task {
+        id
+        body
+      }
+    }
+  }
+`;
+
+export const DELETE_STATUS = gql`
+  mutation ($statusId: ID!) {
+    deleteStatus(statusId: $statusId) {
+      ok
+    }
+  }
+`;
+
+export const UPDATE_TASK = gql`
+  mutation (
+    $taskId: ID!
+    $body: String!
+    $executorId: ID
+    $sprintId: ID
+    $statusId: ID
+    $storyPoints: Int
+  ) {
+    updateTask(
+      taskId: $taskId
+      body: $body
+      executor: $executorId
+      sprint: $sprintId
+      status: $statusId
+      storyPoints: $storyPoints
     ) {
       task {
         id
