@@ -22,7 +22,7 @@
       <v-sheet color="grey lighten-4" class="pa-4">
         <v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar>
         <div>Никита Глазков</div>
-        <div>john@vuetifyjs.com</div>
+        <div>contact@nglazkov.ru</div>
       </v-sheet>
       <v-divider></v-divider>
       <v-list v-for="team in teams" :key="team.id">

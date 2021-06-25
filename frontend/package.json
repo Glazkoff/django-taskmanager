@@ -54,12 +54,16 @@
       "parser": "babel-eslint"
     },
     "rules": {
+      "arrow-parens": [
+        1,
+        "always"
+      ],
       "prettier/prettier": [
         "error",
         {
           "endOfLine": "auto",
           "trailingComma": "none",
-          "arrowParens": "avoid"
+          "arrowParens": "always"
         }
       ]
     }
