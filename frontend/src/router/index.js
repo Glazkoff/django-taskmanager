@@ -4,6 +4,7 @@ import Main from "../views/Main.vue";
 import Auth from "../views/Auth.vue";
 import LogIn from "../components/auth/LogIn.vue";
 import TeamsList from "../components/main/teams/TeamsList.vue";
+import ProjectsList from "../components/main/projects/ProjectsList.vue";
 // import TeamRedirect from "../components/main/teams/TeamRedirect.vue";
 import Desk from "../components/main/boards/Desk.vue";
 
@@ -32,6 +33,10 @@ const routes = [
       {
         path: "/board/:id",
         component: Desk
+      },
+      {
+        path: "/projects",
+        component: ProjectsList
       }
     ]
   },

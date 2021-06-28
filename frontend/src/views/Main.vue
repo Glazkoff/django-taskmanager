@@ -1,8 +1,15 @@
 <template>
   <v-app id="main">
     <v-app-bar app>
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click="drawer = !drawer" v-if="canBeDrawer">
+      </v-app-bar-nav-icon>
       <v-toolbar-title class="text-white">Таск-менеджер</v-toolbar-title>
+      <v-btn text link class="ml-4 d-none d-sm-flex" to="/">
+        Список команд</v-btn
+      >
+      <v-btn text link class="ml-2 d-none d-sm-flex" to="/projects">
+        Список проектов</v-btn
+      >
       <v-spacer></v-spacer>
       <v-menu transition="slide-y-transition" bottom>
         <template v-slot:activator="{ on, attrs }">
@@ -12,13 +19,14 @@
         </template>
         <v-list>
           <v-list-item v-for="(item, i) in menuItems" :key="i" link>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
+            <v-list-item-title :to="item.to">{{
+              item.title
+            }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
     </v-app-bar>
-    <!-- <v-system-bar></v-system-bar> -->
-    <v-navigation-drawer v-model="drawer" app>
+    <v-navigation-drawer v-model="drawer" app v-if="canBeDrawer">
       <v-sheet color="grey lighten-4" class="pa-4">
         <v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar>
         <div>Никита Глазков</div>
@@ -35,14 +43,26 @@
             <v-list-item-title>{{ board.name }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item v-if="team.boardSet.length == 0">
+          <v-list-item-title class="text--grey">
+            <small>В этой команде<br />досок ещё нет</small>
+          </v-list-item-title>
+        </v-list-item>
+      </v-list>
+      <v-divider></v-divider>
+      <v-list color="white" dense style="position: sticky; bottom: 0; left: 0">
+        <v-list-item link @click="moveToMain">
+          <v-list-item-icon>
+            <v-icon>mdi-arrow-left</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Назад</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-main>
-      <router-view></router-view>
-      <!-- <Desk
-        :statusList="statusList"
-        @updateStoryPoints="updateStoryPoints($event)"
-      ></Desk> -->
+      <router-view @openMenu="drawer = true"></router-view>
     </v-main>
     <v-footer>
       <v-card-text class="py-2 text-center">
@@ -58,9 +78,6 @@ import { TEAMS_LIST } from "@/graphql/queries.js";
 
 export default {
   name: "Main",
-  // components: {
-  //   // Desk
-  // },
   apollo: {
     teams: {
       query: TEAMS_LIST
@@ -69,36 +86,46 @@ export default {
   data() {
     return {
       drawer: false,
-      links: [
-        // ["mdi-home", "Главная", "/"],
-        ["mdi-bike-fast", "Доска1", "/order-delivery"],
-        ["mdi-clipboard-list", "Доска2", "/orders"],
-        ["mdi-alert-octagon", "Доска3", "/auth"]
-      ],
       menuItems: [
-        { title: "Click Me" },
-        { title: "Click Me" },
-        { title: "Click Me" },
-        { title: "Click Me 2" }
+        {
+          title: "Список команд",
+          to: "/"
+        },
+        {
+          title: "Список проектов",
+          to: "/projects"
+        },
+        {
+          title: "Выйти",
+          to: "/auth"
+        }
       ]
     };
+  },
+  computed: {
+    canBeDrawer() {
+      return this.$route.path != "/" && this.$route.path != "/projects";
+    }
   },
   methods: {
     updateStoryPoints(upd) {
       this.statusList.forEach((status) => {
         status.tasks.forEach((task) => {
           if (task.id == upd.taskId) {
-            console.log("TASK: ", task);
             task.storyPoints = upd.storyPoints;
           }
         });
       });
-      console.log("!!", upd);
     },
     moveToBoard(boardId) {
       let boardPath = `/board/${boardId}`;
       if (this.$route.path !== boardPath) {
         this.$router.push(boardPath);
+      }
+    },
+    moveToMain() {
+      if (this.$route.path !== "/") {
+        this.$router.push("/");
       }
     }
   }

@@ -273,6 +273,9 @@ export default {
       this.$apollo.queries.board.refresh();
       this.$apollo.queries.board.refetch();
     }
+  },
+  mounted() {
+    this.$emit("openMenu");
   }
 };
 </script>

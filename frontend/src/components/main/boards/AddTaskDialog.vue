@@ -11,6 +11,7 @@
           label="Описание задачи"
           v-model="task.body"
           :rules="[(value) => !!value || 'Поле обязательно']"
+          outlined
         ></v-text-field>
         <v-select
           v-model="task.storyPoints"
@@ -32,11 +33,10 @@
         ></v-select>
         <v-select
           v-model="task.status"
-          :items="statusSet"
+          :items="updatedStatusSet"
           item-text="name"
           item-value="id"
           label="Статус"
-          :rules="[(value) => !!value || 'Поле обязательно']"
           outlined
         ></v-select>
         <v-select
@@ -161,7 +161,7 @@ export default {
               sprintId: this.task.sprint,
               executorId: this.task.executor,
               storyPoints: this.task.storyPoints,
-              statusId: this.task.status,
+              statusId: this.task.status || 0,
               board: this.$route.params.id
             }
           })
@@ -175,6 +175,21 @@ export default {
             console.log(err);
           });
       }
+    }
+  },
+  computed: {
+    updatedStatusSet() {
+      let updArr = [];
+      updArr[0] = {
+        id: null,
+        name: "Без статуса"
+      };
+      for (let index = 0; index < this.statusSet.length; index++) {
+        const element = this.statusSet[index];
+        updArr.push(element);
+      }
+      // updArr.concat(this.statusSet);
+      return updArr;
     }
   }
 };

@@ -46,6 +46,7 @@ export const BOARD_BY_ID = gql`
           }
         }
         project {
+          id
           name
           prefix
           sprintSet {
@@ -98,6 +99,10 @@ export const TEAMS_LIST = gql`
       id
       name
       boardSet {
+        id
+        name
+      }
+      project {
         id
         name
       }
@@ -193,6 +198,118 @@ export const UPDATE_TASK = gql`
       task {
         id
         body
+      }
+    }
+  }
+`;
+
+export const CREATE_BOARD = gql`
+  mutation ($name: String!, $teamId: ID!) {
+    createBoard(name: $name, teamId: $teamId) {
+      board {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const USERS = gql`
+  {
+    users {
+      id
+      firstName
+      lastName
+      username
+    }
+  }
+`;
+
+export const PROJECTS = gql`
+  {
+    projects {
+      id
+      name
+      leader {
+        id
+        username
+        lastName
+        firstName
+        lastLogin
+      }
+      prefix
+      draft
+      sprintSet {
+        id
+        name
+      }
+      settings {
+        teamLimit
+        sprintLimit
+      }
+      teams {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const CREATE_TEAMS = gql`
+  mutation (
+    $name: String!
+    $leaderId: ID!
+    $projectId: ID!
+    $participants: [ID]
+  ) {
+    createTeam(
+      name: $name
+      leaderId: $leaderId
+      projectId: $projectId
+      participants: $participants
+    ) {
+      team {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const CREATE_PROJECT = gql`
+  mutation ($name: String!, $prefix: String!, $teams: [ID], $leaderId: ID!) {
+    createProject(
+      name: $name
+      prefix: $prefix
+      teams: $teams
+      leaderId: $leaderId
+    ) {
+      project {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const CREATE_SPRINT = gql`
+  mutation (
+    $name: String!
+    $aim: String!
+    $projectId: ID!
+    $startDate: String
+    $finishDate: String
+  ) {
+    createSprint(
+      name: $name
+      aim: $aim
+      projectId: $projectId
+      startDate: $startDate
+      finishDate: $finishDate
+    ) {
+      sprint {
+        id
+        name
       }
     }
   }

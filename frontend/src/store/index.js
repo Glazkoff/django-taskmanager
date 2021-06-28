@@ -5,7 +5,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    role: "user"
+    role: "admin"
   },
   getters: {
     isUser: (state) => {
