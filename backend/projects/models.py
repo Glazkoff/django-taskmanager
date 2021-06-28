@@ -53,7 +53,7 @@ class Project(models.Model):
 
 class Sprint(models.Model):
     """Спринты"""
-    name = models.CharField("Название спринта", max_length=100, unique=True)
+    name = models.CharField("Название спринта", max_length=100)
     aim = models.TextField("Цель спринта")
     project = models.ForeignKey(
         "Project",

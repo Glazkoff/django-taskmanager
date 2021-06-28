@@ -24,4 +24,5 @@ class TeamType(DjangoObjectType):
         fields = '__all__'
 
     def resolve_participants(self, info):
-        return Employee.objects.all()
+        ids = [participant.id for participant in self.participants.all()]
+        return Employee.objects.filter(user__pk__in=ids)

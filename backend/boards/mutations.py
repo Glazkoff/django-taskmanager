@@ -3,14 +3,12 @@ from .serializers import CreateTaskSerializer
 import graphene
 from graphene_django.rest_framework.mutation import SerializerMutation
 
-from .types import TaskType, StatusType
+from .types import TaskType, StatusType, BoardType
+from teams.types import TeamType
+from projects.types import ProjectType, SprintType
 from .models import Task, Status, Board
-from projects.models import Sprint
-
-
-# class CreateTaskMutation(SerializerMutation):
-#     class Meta:
-#         serializer_class = CreateTaskSerializer
+from projects.models import Sprint, Project
+from teams.models import Team
 
 
 class UpdateStoryPointsMutation(graphene.Mutation):
@@ -92,13 +90,15 @@ class CreateTaskMutation(graphene.Mutation):
     task = graphene.Field(TaskType)
 
     @classmethod
-    def mutate(cls, root, info, body, executor, sprint, status, story_points, board):
+    def mutate(cls, root, info, body, executor, sprint, story_points, board, status=None):
         executorObj = User.objects.get(pk=executor)
         sprintObj = Sprint.objects.get(pk=sprint)
-        statusObj = Status.objects.get(pk=status)
         boardObj = Board.objects.get(pk=board)
-        task = Task.objects.create(executor=executorObj,
-                                   sprint=sprintObj, status=statusObj, body=body, storyPoints=story_points, board=boardObj)
+        statusObj = None
+        if status is None or status == 0:
+            statusObj = Status.objects.get(pk=status)
+        task = Task.objects.create(executor=executorObj, sprint=sprintObj,
+                                   status=statusObj, body=body, storyPoints=story_points, board=boardObj)
         task.save()
 
         return CreateTaskMutation(task=task)
@@ -133,3 +133,82 @@ class UpdateTaskMutation(graphene.Mutation):
         task.save()
 
         return UpdateTaskMutation(task=task)
+
+
+class CreateBoardMutation(graphene.Mutation):
+    class Arguments:
+        team_id = graphene.ID(required=True)
+        name = graphene.String(required=True)
+
+    board = graphene.Field(BoardType)
+
+    @classmethod
+    def mutate(cls, root, info, team_id, name):
+        team = Team.objects.get(pk=team_id)
+        board = Board.objects.create(team=team, name=name)
+        board.save()
+
+        return CreateBoardMutation(board=board)
+
+
+class CreateTeamMutation(graphene.Mutation):
+    class Arguments:
+        name = graphene.String(required=True)
+        leader_id = graphene.ID(required=True)
+        project_id = graphene.ID(required=True)
+        participants = graphene.List(graphene.ID)
+
+    team = graphene.Field(TeamType)
+
+    @classmethod
+    def mutate(cls, root, info, name, leader_id, project_id, participants):
+        nameObj = name
+        leaderObj = User.objects.get(pk=leader_id)
+        projectObj = Project.objects.get(pk=project_id)
+        participantsObj = User.objects.filter(pk__in=participants)
+        team = Team.objects.create(
+            name=nameObj, leader=leaderObj, project=projectObj)
+        team.participants.set(participantsObj)
+        team.save()
+        return CreateTeamMutation(team=team)
+
+
+class CreateProjectMutation(graphene.Mutation):
+    class Arguments:
+        name = graphene.String(required=True)
+        prefix = graphene.String(required=True)
+        draft = graphene.Boolean()
+        leader_id = graphene.ID(required=True)
+        teams = graphene.List(graphene.ID)
+
+    project = graphene.Field(ProjectType)
+
+    @classmethod
+    def mutate(cls, root, info, leader_id, name, prefix, teams, draft=False):
+        leader = User.objects.get(pk=leader_id)
+        project = Project.objects.create(
+            name=name, prefix=prefix, draft=draft, leader=leader)
+        teams = Team.objects.filter(id__in=teams)
+        project.teams.set(teams)
+        project.save()
+
+        return CreateProjectMutation(project=project)
+
+
+class CreateSprintMutation(graphene.Mutation):
+    class Arguments:
+        name = graphene.String(required=True)
+        aim = graphene.String(required=True)
+        project_id = graphene.ID(required=True)
+        start_date = graphene.String()
+        finish_date = graphene.String()
+
+    sprint = graphene.Field(SprintType)
+
+    @classmethod
+    def mutate(cls, root, info, name, aim, project_id, start_date=None, finish_date=None):
+        projectObj = Project.objects.get(pk=project_id)
+        sprint = Sprint.objects.create(
+            name=name, aim=aim, project=projectObj, startDate=start_date, finishDate=finish_date)
+
+        return CreateSprintMutation(sprint=sprint)

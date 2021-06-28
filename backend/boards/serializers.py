@@ -52,9 +52,11 @@ class CreateTaskSerializer(serializers.ModelSerializer):
         fields = ("executor", "storyPoints", "body", "board")
 
     def create(self, validated_data):
-        task = Task.objects.update_or_create(executor=validated_data.get("executor", None), board=validated_data.get(
-            "board", None), body=validated_data.get("body", None), defaults={"storyPoints": validated_data.get("storyPoints", None)})
-        return task
+        return Task.objects.update_or_create(
+            executor=validated_data.get("executor", None),
+            board=validated_data.get("board", None),
+            body=validated_data.get("body", None),
+            defaults={"storyPoints": validated_data.get("storyPoints", None)})
 
 
 class TaskDetailSerializer(serializers.ModelSerializer):
