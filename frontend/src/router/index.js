@@ -5,8 +5,8 @@ import Auth from "../views/Auth.vue";
 import LogIn from "../components/auth/LogIn.vue";
 import TeamsList from "../components/main/teams/TeamsList.vue";
 import ProjectsList from "../components/main/projects/ProjectsList.vue";
-// import TeamRedirect from "../components/main/teams/TeamRedirect.vue";
 import Desk from "../components/main/boards/Desk.vue";
+import ProjectDashboard from "../components/main/projects/ProjectDashboard.vue";
 
 Vue.use(VueRouter);
 
@@ -57,6 +57,11 @@ const routes = [
       {
         path: "/projects",
         component: ProjectsList
+      },
+      {
+        path: "/dashboard/:id",
+        name: "ProjectDashboard",
+        component: ProjectDashboard
       }
     ]
   },

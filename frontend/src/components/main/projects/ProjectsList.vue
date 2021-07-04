@@ -20,7 +20,7 @@
           <template v-slot:default>
             <thead>
               <tr>
-                <td colspan="8">
+                <td colspan="9">
                   <v-btn
                     color="black"
                     class="mt-4 mb-4"
@@ -44,6 +44,7 @@
                 <th class="text-left">Спринты</th>
                 <th class="text-left">Команды</th>
                 <th class="text-left">Настройки</th>
+                <th class="text-left">Дашборд</th>
               </tr>
             </thead>
             <tbody>
@@ -84,6 +85,11 @@
                   </div>
                 </td>
                 <td>{{ project.settings }}</td>
+                <td>
+                  <v-btn dark color="black" @click="goToDashBoard(project.id)"
+                    >Перейти к дашборду</v-btn
+                  >
+                </td>
               </tr>
             </tbody>
           </template>
@@ -129,6 +135,13 @@ export default {
     },
     closeAddSprintDialog() {
       this.addSprintDialog = false;
+    },
+    goToDashBoard(projectId) {
+      this.$router.push({
+        name: "ProjectDashboard",
+        params: { id: projectId }
+      });
+      console.log(projectId);
     }
   }
 };
