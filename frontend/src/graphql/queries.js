@@ -314,3 +314,20 @@ export const CREATE_SPRINT = gql`
     }
   }
 `;
+
+export const CREATE_USER_AUTH = gql`
+  mutation ($username: String!, $password: String!) {
+    createUserAuth(username: $username, password: $password) {
+      user {
+        id
+        username
+        firstName
+        lastName
+      }
+      employee {
+        teamRole
+      }
+      isOk
+    }
+  }
+`;

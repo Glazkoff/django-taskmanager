@@ -1,7 +1,7 @@
 import graphene
 from .models import Board, Task, Status, Comment
 from .types import BoardType, TaskType, StatusType, CommentType
-from .mutations import CreateTaskMutation, UpdateStoryPointsMutation, UpdateStatusMutation, CreateStatusMutation, DeleteStatusMutation, UpdateTaskMutation, CreateBoardMutation, CreateTeamMutation, CreateProjectMutation, CreateSprintMutation
+from .mutations import CreateTaskMutation, UpdateStoryPointsMutation, UpdateStatusMutation, CreateStatusMutation, DeleteStatusMutation, UpdateTaskMutation, CreateBoardMutation, CreateTeamMutation, CreateProjectMutation, CreateSprintMutation, CreateUserAuthMutation
 
 
 class Query(graphene.ObjectType):
@@ -32,6 +32,7 @@ class Mutation(graphene.ObjectType):
     create_team = CreateTeamMutation.Field()
     create_project = CreateProjectMutation.Field()
     create_sprint = CreateSprintMutation.Field()
+    create_user_auth = CreateUserAuthMutation.Field()
 
 
 schema = graphene.Schema(query=Query,)

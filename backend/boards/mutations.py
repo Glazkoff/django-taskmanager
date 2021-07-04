@@ -4,11 +4,13 @@ import graphene
 from graphene_django.rest_framework.mutation import SerializerMutation
 
 from .types import TaskType, StatusType, BoardType
-from teams.types import TeamType
+from teams.types import TeamType, UserType, EmployeeType
 from projects.types import ProjectType, SprintType
 from .models import Task, Status, Board
 from projects.models import Sprint, Project
-from teams.models import Team
+from teams.models import Team, Employee
+from django.contrib.auth.hashers import check_password
+from django.shortcuts import get_object_or_404
 
 
 class UpdateStoryPointsMutation(graphene.Mutation):
@@ -212,3 +214,48 @@ class CreateSprintMutation(graphene.Mutation):
             name=name, aim=aim, project=projectObj, startDate=start_date, finishDate=finish_date)
 
         return CreateSprintMutation(sprint=sprint)
+
+
+class CreateProjectMutation(graphene.Mutation):
+    class Arguments:
+        name = graphene.String(required=True)
+        prefix = graphene.String(required=True)
+        draft = graphene.Boolean()
+        leader_id = graphene.ID(required=True)
+        teams = graphene.List(graphene.ID)
+
+    project = graphene.Field(ProjectType)
+
+    @classmethod
+    def mutate(cls, root, info, leader_id, name, prefix, teams, draft=False):
+        leader = User.objects.get(pk=leader_id)
+        project = Project.objects.create(
+            name=name, prefix=prefix, draft=draft, leader=leader)
+        teams = Team.objects.filter(id__in=teams)
+        project.teams.set(teams)
+        project.save()
+
+        return CreateProjectMutation(project=project)
+
+
+class CreateUserAuthMutation(graphene.Mutation):
+    class Arguments:
+        username = graphene.String(required=True)
+        password = graphene.String(required=True)
+
+    user = graphene.Field(UserType)
+    employee = graphene.Field(EmployeeType)
+    is_ok = graphene.Boolean()
+
+    @classmethod
+    def mutate(cls, root, info,  username, password):
+        try:
+            user = User.objects.get(username=username)
+            is_ok = check_password(password, user.password)
+            if not is_ok:
+                return CreateUserAuthMutation(user=None, employee=None, is_ok=is_ok)
+            employee = Employee.objects.get(user=user)
+            return CreateUserAuthMutation(user=user, employee=employee, is_ok=is_ok)
+        except User.DoesNotExist:
+            user = None
+            return CreateUserAuthMutation(user=None, employee=None, is_ok=False)

@@ -19,7 +19,7 @@
         </template>
         <v-list>
           <v-list-item v-for="(item, i) in menuItems" :key="i" link>
-            <v-list-item-title :to="item.to">{{
+            <v-list-item-title @click="updateRoute(item.to)">{{
               item.title
             }}</v-list-item-title>
           </v-list-item>
@@ -29,8 +29,8 @@
     <v-navigation-drawer v-model="drawer" app v-if="canBeDrawer">
       <v-sheet color="grey lighten-4" class="pa-4">
         <v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar>
-        <div>Никита Глазков</div>
-        <div>contact@nglazkov.ru</div>
+        <div>{{ name }}</div>
+        <div>{{ name }}</div>
       </v-sheet>
       <v-divider></v-divider>
       <v-list v-for="team in teams" :key="team.id">
@@ -97,7 +97,7 @@ export default {
         },
         {
           title: "Выйти",
-          to: "/auth"
+          to: "logout"
         }
       ]
     };
@@ -105,9 +105,35 @@ export default {
   computed: {
     canBeDrawer() {
       return this.$route.path != "/" && this.$route.path != "/projects";
+    },
+    name() {
+      let user = localStorage.getItem("user");
+      if (user) {
+        let parseUsr = JSON.parse(user);
+        return parseUsr.user.firstName + parseUsr.user.lastName;
+      } else return "-";
+    },
+    username() {
+      let user = localStorage.getItem("user");
+      if (user) {
+        let parseUsr = JSON.parse(user);
+        return parseUsr.user.username;
+      } else return "-";
     }
   },
   methods: {
+    updateRoute(to) {
+      if (to == "logout") {
+        localStorage.clear("user");
+        localStorage.clear("role");
+        localStorage.clear("isAuthorized");
+        this.$router.push("/auth");
+      } else {
+        if (this.$route.path !== to) {
+          this.$router.push(to);
+        }
+      }
+    },
     updateStoryPoints(upd) {
       this.statusList.forEach((status) => {
         status.tasks.forEach((task) => {

@@ -10,10 +10,29 @@ import Desk from "../components/main/boards/Desk.vue";
 
 Vue.use(VueRouter);
 
+const ifNotAuthenticated = (to, from, next) => {
+  let role = localStorage.getItem("role");
+  if (!role) {
+    next();
+    return;
+  }
+  next("/");
+};
+
+const ifAuthenticated = (to, from, next) => {
+  let role = localStorage.getItem("role");
+  if (role) {
+    next();
+    return;
+  }
+  next("/auth");
+};
+
 const routes = [
   {
     path: "/auth",
     component: Auth,
+    beforeEnter: ifNotAuthenticated,
     children: [
       {
         path: "/",
@@ -25,6 +44,7 @@ const routes = [
   {
     path: "/",
     component: Main,
+    beforeEnter: ifAuthenticated,
     children: [
       {
         path: "/",

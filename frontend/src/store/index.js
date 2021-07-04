@@ -5,20 +5,24 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    role: "admin"
+    role: localStorage.getItem("role") || null
   },
   getters: {
     isUser: (state) => {
-      return state.role === "user";
+      return state.role === "USER";
     },
     isManager: (state) => {
-      return state.role === "manager";
+      return state.role === "MANAGER";
     },
     isAdmin: (state) => {
-      return state.role === "admin";
+      return state.role === "ADMIN";
     }
   },
-  mutations: {},
+  mutations: {
+    SET_ROLE: (state, role) => {
+      state.role = role;
+    }
+  },
   actions: {},
   modules: {}
 });

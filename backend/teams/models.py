@@ -4,11 +4,22 @@ from projects.models import Project
 
 
 class Employee(models.Model):
+    ROLE_CHOICES = (('admin', 'Администратор'),
+                    ('manager', 'Менеджер'),
+                    ('user', 'Пользователь'))
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    teamRole = models.CharField("Роль в команде", max_length=100)
+    teamRole = models.CharField(
+        "Роль в команде", max_length=100, choices=ROLE_CHOICES)
 
     def __str__(self):
-        return self.teamRole
+        if self.teamRole == 'admin':
+            return "Администратор"
+        elif self.teamRole == 'manager':
+            return "Менеджер"
+        elif self.teamRole == 'user':
+            return "Пользователь"
+        else:
+            return "-"
 
     class Meta:
         managed = True
