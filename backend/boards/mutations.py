@@ -80,6 +80,20 @@ class DeleteStatusMutation(graphene.Mutation):
         return cls(ok=True)
 
 
+class DeleteProjectMutation(graphene.Mutation):
+    class Arguments:
+        project_id = graphene.ID(required=True)
+
+    ok = graphene.Boolean()
+
+    @classmethod
+    def mutate(cls, root, info, project_id):
+        project = Project.objects.get(pk=project_id)
+        project.delete()
+
+        return cls(ok=True)
+
+
 class CreateTaskMutation(graphene.Mutation):
     class Arguments:
         body = graphene.String(required=True)
@@ -92,12 +106,21 @@ class CreateTaskMutation(graphene.Mutation):
     task = graphene.Field(TaskType)
 
     @classmethod
-    def mutate(cls, root, info, body, executor, sprint, story_points, board, status=None):
-        executorObj = User.objects.get(pk=executor)
+    def mutate(cls, root, info, body, executor, sprint,  board, story_points=0, status=None):
+        if int(executor) == 0 or executor is None:
+            executorObj = None
+        else:
+            executorObj = User.objects.get(pk=executor)
         sprintObj = Sprint.objects.get(pk=sprint)
         boardObj = Board.objects.get(pk=board)
-        statusObj = None
-        if status is None or status == 0:
+
+        print('STATUS')
+        print(status)
+        print(int(status) == 0)
+        print(status is None)
+        if status is None or int(status) == 0:
+            statusObj = None
+        else:
             statusObj = Status.objects.get(pk=status)
         task = Task.objects.create(executor=executorObj, sprint=sprintObj,
                                    status=statusObj, body=body, storyPoints=story_points, board=boardObj)

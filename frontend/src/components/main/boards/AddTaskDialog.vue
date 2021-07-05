@@ -19,7 +19,6 @@
           item-text="number"
           item-value="number"
           label="Story points"
-          :rules="[(value) => !!value || 'Поле обязательно']"
           outlined
         ></v-select>
         <v-select
@@ -138,13 +137,21 @@ export default {
               taskId: this.editTaskObj.id,
               body: this.task.body,
               sprintId: this.task.sprint,
-              executorId: this.task.executor,
-              storyPoints: this.task.storyPoints,
-              statusId: this.task.status
+              executorId: this.task.executor || 0,
+              storyPoints: this.task.storyPoints || 0,
+              statusId: this.task.status || 0
             }
           })
           .then(() => {
             this.formLoading = false;
+            this.task = {
+              storyPoints: null,
+              body: null,
+              executor: null,
+              sprint: null,
+              status: null,
+              comments: []
+            };
             this.$emit("refresh");
             this.$emit("close");
           })
@@ -159,14 +166,22 @@ export default {
             variables: {
               body: this.task.body,
               sprintId: this.task.sprint,
-              executorId: this.task.executor,
-              storyPoints: this.task.storyPoints,
+              executorId: this.task.executor || 0,
+              storyPoints: this.task.storyPoints || 0,
               statusId: this.task.status || 0,
               board: this.$route.params.id
             }
           })
           .then(() => {
             this.formLoading = false;
+            this.task = {
+              storyPoints: null,
+              body: null,
+              executor: null,
+              sprint: null,
+              status: null,
+              comments: []
+            };
             this.$emit("refresh");
             this.$emit("close");
           })

@@ -12,6 +12,11 @@
       ref="addSprintDialog"
     ></AddSprintDialog>
     <v-row class="mt-2">
+      <v-text-field label="Поиск проекта" outlined v-model="projectsSearch">
+        <v-icon slot="append" color="black"> mdi-magnify </v-icon>
+      </v-text-field>
+    </v-row>
+    <v-row class="mt-2">
       <h1>Список проектов</h1>
     </v-row>
     <v-row>
@@ -43,13 +48,13 @@
                 <th class="text-left">Является черновиком</th>
                 <th class="text-left">Спринты</th>
                 <th class="text-left">Команды</th>
-                <th class="text-left">Настройки</th>
                 <th class="text-left">Дашборд</th>
+                <th class="text-left"></th>
               </tr>
             </thead>
             <tbody>
               <tr
-                v-for="project in projects"
+                v-for="project in filteredProjectsArr"
                 :key="project.id"
                 class="pt-2 pb-2"
               >
@@ -75,7 +80,7 @@
                       text
                       small
                       @click="startSprintAdding(project.id)"
-                      >Добавить спринт</v-btn
+                      >Добавить<br />спринт</v-btn
                     >
                   </div>
                 </td>
@@ -84,11 +89,15 @@
                     {{ index + 1 }}. {{ team.name }}
                   </div>
                 </td>
-                <td>{{ project.settings }}</td>
                 <td>
                   <v-btn dark color="black" @click="goToDashBoard(project.id)"
                     >Перейти к дашборду</v-btn
                   >
+                </td>
+                <td>
+                  <v-btn color="black" icon @click="deleteProject(project.id)">
+                    <v-icon>mdi-close</v-icon>
+                  </v-btn>
                 </td>
               </tr>
             </tbody>
@@ -103,7 +112,7 @@
 import AddProjectDialog from "@/components/main/projects/AddProjectDialog.vue";
 import AddSprintDialog from "@/components/main/projects/AddSprintDialog.vue";
 
-import { PROJECTS } from "@/graphql/queries.js";
+import { PROJECTS, DELETE_PROJECT } from "@/graphql/queries.js";
 export default {
   name: "ProjectsList",
   components: { AddProjectDialog, AddSprintDialog },
@@ -112,10 +121,16 @@ export default {
       query: PROJECTS
     }
   },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.refreshData();
+    });
+  },
   data() {
     return {
       addProjectDialog: false,
-      addSprintDialog: false
+      addSprintDialog: false,
+      projectsSearch: ""
     };
   },
   methods: {
@@ -141,7 +156,38 @@ export default {
         name: "ProjectDashboard",
         params: { id: projectId }
       });
-      console.log(projectId);
+    },
+    deleteProject(projectId) {
+      this.$apollo
+        .mutate({
+          mutation: DELETE_PROJECT,
+          variables: {
+            projectId
+          }
+        })
+        .then(() => {
+          this.refreshData();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  },
+  computed: {
+    filteredProjectsArr() {
+      let projects = this.projects;
+      if (projects !== undefined) {
+        projects = projects.filter((el) => {
+          let findIndexName = el.name
+            .toLowerCase()
+            .indexOf(this.projectsSearch.toLowerCase());
+          let findIndexPrefix = el.prefix
+            .toLowerCase()
+            .indexOf(this.projectsSearch.toLowerCase());
+          return findIndexName !== -1 || findIndexPrefix !== -1;
+        });
+      }
+      return projects;
     }
   }
 };

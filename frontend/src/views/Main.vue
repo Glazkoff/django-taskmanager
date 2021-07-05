@@ -104,7 +104,11 @@ export default {
   },
   computed: {
     canBeDrawer() {
-      return this.$route.path != "/" && this.$route.path != "/projects";
+      return (
+        this.$route.path != "/" &&
+        this.$route.path != "/projects" &&
+        this.$route.name != "ProjectDashboard"
+      );
     },
     name() {
       let user = localStorage.getItem("user");

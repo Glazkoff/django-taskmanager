@@ -331,3 +331,29 @@ export const CREATE_USER_AUTH = gql`
     }
   }
 `;
+
+export const STATISTICS = gql`
+  query ($projectId: ID!) {
+    statistics(projectId: $projectId) {
+      teamsCount
+      sprintsCount
+      statusAverage
+      teams {
+        name
+        boardSet {
+          id
+          tasksCount
+        }
+        boardsCount
+      }
+    }
+  }
+`;
+
+export const DELETE_PROJECT = gql`
+  mutation ($projectId: ID!) {
+    deleteProject(projectId: $projectId) {
+      ok
+    }
+  }
+`;

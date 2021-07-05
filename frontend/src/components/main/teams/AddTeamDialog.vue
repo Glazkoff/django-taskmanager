@@ -37,7 +37,7 @@
           v-model="team.participants"
           :items="users"
           item-value="id"
-          label="Лидер"
+          label="Участники"
           :rules="[(value) => !!value || 'Поле обязательно']"
           outlined
           multiple

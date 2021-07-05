@@ -18,6 +18,7 @@ class EmployeeType(DjangoObjectType):
 
 class TeamType(DjangoObjectType):
     participants = graphene.List(EmployeeType)
+    boards_count = graphene.Int()
 
     class Meta:
         model = Team
