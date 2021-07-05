@@ -12,12 +12,16 @@
       ref="addSprintDialog"
     ></AddSprintDialog>
     <v-row class="mt-2">
-      <v-text-field label="Поиск проекта" outlined v-model="projectsSearch">
-        <v-icon slot="append" color="black"> mdi-magnify </v-icon>
-      </v-text-field>
+      <v-col>
+        <h1>Список проектов</h1>
+      </v-col>
     </v-row>
     <v-row class="mt-2">
-      <h1>Список проектов</h1>
+      <v-col>
+        <v-text-field label="Поиск проекта" outlined v-model="projectsSearch">
+          <v-icon slot="append" color="black"> mdi-magnify </v-icon>
+        </v-text-field>
+      </v-col>
     </v-row>
     <v-row>
       <v-col col="12">

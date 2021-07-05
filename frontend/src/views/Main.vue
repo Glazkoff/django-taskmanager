@@ -1,6 +1,6 @@
 <template>
   <v-app id="main">
-    <v-app-bar app>
+    <v-app-bar class="d-print-none" app>
       <v-app-bar-nav-icon @click="drawer = !drawer" v-if="canBeDrawer">
       </v-app-bar-nav-icon>
       <v-toolbar-title class="text-white">Таск-менеджер</v-toolbar-title>
@@ -26,7 +26,12 @@
         </v-list>
       </v-menu>
     </v-app-bar>
-    <v-navigation-drawer v-model="drawer" app v-if="canBeDrawer">
+    <v-navigation-drawer
+      class="d-print-none"
+      v-model="drawer"
+      app
+      v-if="canBeDrawer"
+    >
       <v-sheet color="grey lighten-4" class="pa-4">
         <v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar>
         <div>{{ name }}</div>
@@ -64,7 +69,7 @@
     <v-main>
       <router-view @openMenu="drawer = true"></router-view>
     </v-main>
-    <v-footer>
+    <v-footer class="d-print-none">
       <v-card-text class="py-2 text-center">
         {{ new Date().getFullYear() }} —
         <strong>Глазков Никита, 181-321</strong>

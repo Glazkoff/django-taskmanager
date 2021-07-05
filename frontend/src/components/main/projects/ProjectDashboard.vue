@@ -2,9 +2,13 @@
   <v-container class="dashboard" fill-height>
     <v-layout>
       <v-flex>
-        <h1 class="mb-2">Дашборд проекта #{{ projectId }}</h1>
         <v-row>
-          <v-col cols="12" xs="12" sm="6" md="6" lg="4">
+          <v-col>
+            <h1 class="mb-2">Дашборд проекта #{{ projectId }}</h1>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="6" xs="12" sm="6" md="6" lg="4">
             <v-card class="pa-2" height="100%">
               <h5 class="text-center">
                 Данные о количестве задач<br />по всем доскам в командах
@@ -22,7 +26,7 @@
               </v-layout>
             </v-card>
           </v-col>
-          <v-col cols="12" xs="12" sm="6" md="6" lg="4">
+          <v-col cols="6" xs="12" sm="6" md="6" lg="4">
             <v-card class="pa-2" height="100%">
               <h5 class="text-center">
                 Текущее количество комнад <br />
@@ -44,7 +48,7 @@
               </v-layout>
             </v-card>
           </v-col>
-          <v-col cols="12" xs="12" sm="6" md="6" lg="4">
+          <v-col cols="6" xs="12" sm="6" md="6" lg="4">
             <v-card class="pa-2" height="100%">
               <h5 class="text-center">
                 Среднее количество статусов<br />
@@ -70,7 +74,7 @@
               </v-layout>
             </v-card>
           </v-col>
-          <v-col cols="12" xs="12" sm="6" md="6" lg="4">
+          <v-col cols="6" xs="12" sm="6" md="6" lg="4">
             <v-card class="pa-2" height="100%">
               <h5 class="text-center">
                 Данные о количестве досок<br />
@@ -89,7 +93,7 @@
               </v-layout>
             </v-card>
           </v-col>
-          <v-col cols="12" xs="12" sm="6" md="6" lg="4">
+          <v-col cols="6" xs="12" sm="6" md="6" lg="4">
             <v-card class="pa-2" height="100%">
               <h5 class="text-center">
                 Данные о количестве спринтов<br />
@@ -113,8 +117,8 @@
               </v-layout>
             </v-card>
           </v-col>
-          <v-col cols="12" xs="12" sm="6" md="6" lg="4">
-            <v-card class="pa-2" height="100%">
+          <v-col cols="6" xs="12" sm="6" md="6" lg="4">
+            <v-card class="pa-2 d-print-none" height="100%">
               <h5 class="text-center">Действия</h5>
               <v-layout justify-content align-center fill-height>
                 <v-flex class="text-center">
@@ -164,24 +168,36 @@ export default {
   computed: {
     noTeamsStatistics() {
       if (this.allTasksInTeamsDataCollection != undefined) {
-        if (this.allTasksInTeamsDataCollection.dataset != undefined) {
-          return this.allTasksInTeamsDataCollection.dataset.data.length == 0;
+        if (this.allTasksInTeamsDataCollection.datasets != undefined) {
+          if (this.allTasksInTeamsDataCollection.datasets.length !== 0) {
+            return (
+              this.allTasksInTeamsDataCollection.datasets[0].data.length == 0
+            );
+          } else {
+            return false;
+          }
         } else {
-          return true;
+          return false;
         }
       } else {
-        return true;
+        return false;
       }
     },
     noBoardsStatistics() {
       if (this.allBoardsInTeamsDataCollection != undefined) {
-        if (this.allBoardsInTeamsDataCollection.dataset != undefined) {
-          return this.allBoardsInTeamsDataCollection.dataset.data.length == 0;
+        if (this.allBoardsInTeamsDataCollection.datasets != undefined) {
+          if (this.allBoardsInTeamsDataCollection.datasets.length !== 0) {
+            return (
+              this.allBoardsInTeamsDataCollection.datasets[0].data.length == 0
+            );
+          } else {
+            return false;
+          }
         } else {
-          return true;
+          return false;
         }
       } else {
-        return true;
+        return false;
       }
     },
     projectId() {
@@ -206,7 +222,7 @@ export default {
             const board = team.boardSet[index];
             allTasksOfTeam += board.tasksCount;
           }
-          dataCollection.labels.push(team.name);
+          dataCollection.labels.push(`Задачи команды "${team.name}"`);
           dataCollection.datasets[0].data.push(allTasksOfTeam);
         }
       }
@@ -260,5 +276,44 @@ export default {
 }
 .v-card__title {
   display: unset;
+}
+@media print {
+  body {
+    font-size: 28px;
+  }
+  @page {
+    margin: 1cm;
+  }
+  .v-sheet.v-card:not(.v-sheet--outlined) {
+    box-shadow: unset !important;
+    width: 100%;
+    page-break-before: always;
+  }
+  *,
+  *:before,
+  *:after,
+  *:first-letter,
+  p:first-line,
+  div:first-line,
+  blockquote:first-line,
+  li:first-line {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  h1 {
+    margin-bottom: 4rem;
+    text-align: center !important;
+  }
+  h1:before {
+    content: url(https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl=http://localhost:8000&choe=UTF-8);
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+  .row + .row {
+    margin-top: 60px;
+  }
 }
 </style>

@@ -100,6 +100,12 @@ export default {
           }
         })
         .then(() => {
+          this.team = {
+            name: null,
+            leader: null,
+            project: null,
+            participants: []
+          };
           this.$emit("refresh");
           this.$emit("close");
         })
