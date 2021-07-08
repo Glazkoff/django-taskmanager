@@ -7,3 +7,4 @@ psycopg2-binary
 django-import-export
 graphene-django
 gunicorn==20.1.0
+gevent==21.1.2
