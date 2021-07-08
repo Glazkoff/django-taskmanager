@@ -6,3 +6,4 @@ djangorestframework
 psycopg2-binary
 django-import-export
 graphene-django
+gunicorn==20.1.0
