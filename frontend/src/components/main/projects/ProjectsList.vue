@@ -25,24 +25,18 @@
     </v-row>
     <v-row>
       <v-col col="12">
+        <v-btn
+          color="black"
+          class="mt-4 mb-4"
+          block
+          @click="startProjectAdding"
+          dark
+          outlined
+        >
+          Добавить новый проект</v-btn
+        >
         <v-simple-table width="100%">
           <template v-slot:default>
-            <thead>
-              <tr>
-                <td colspan="9">
-                  <v-btn
-                    color="black"
-                    class="mt-4 mb-4"
-                    block
-                    @click="startProjectAdding"
-                    dark
-                    outlined
-                  >
-                    Добавить новый проект</v-btn
-                  >
-                </td>
-              </tr>
-            </thead>
             <thead>
               <tr>
                 <th class="text-left">ID</th>

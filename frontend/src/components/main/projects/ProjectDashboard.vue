@@ -8,7 +8,7 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="6" xs="12" sm="6" md="6" lg="4">
+          <v-col cols="12" xs="12" sm="6" md="6" lg="4">
             <v-card class="pa-2" height="100%">
               <h5 class="text-center">
                 Данные о количестве задач<br />по всем доскам в командах
@@ -26,10 +26,10 @@
               </v-layout>
             </v-card>
           </v-col>
-          <v-col cols="6" xs="12" sm="6" md="6" lg="4">
+          <v-col cols="12" xs="12" sm="6" md="6" lg="4">
             <v-card class="pa-2" height="100%">
               <h5 class="text-center">
-                Текущее количество комнад <br />
+                Текущее количество команд <br />
                 по всему проекту
               </h5>
               <v-layout justify-content align-center fill-height>
@@ -48,7 +48,7 @@
               </v-layout>
             </v-card>
           </v-col>
-          <v-col cols="6" xs="12" sm="6" md="6" lg="4">
+          <v-col cols="12" xs="12" sm="6" md="6" lg="4">
             <v-card class="pa-2" height="100%">
               <h5 class="text-center">
                 Среднее количество статусов<br />
@@ -74,7 +74,7 @@
               </v-layout>
             </v-card>
           </v-col>
-          <v-col cols="6" xs="12" sm="6" md="6" lg="4">
+          <v-col cols="12" xs="12" sm="6" md="6" lg="4">
             <v-card class="pa-2" height="100%">
               <h5 class="text-center">
                 Данные о количестве досок<br />
@@ -93,7 +93,7 @@
               </v-layout>
             </v-card>
           </v-col>
-          <v-col cols="6" xs="12" sm="6" md="6" lg="4">
+          <v-col cols="12" xs="12" sm="6" md="6" lg="4">
             <v-card class="pa-2" height="100%">
               <h5 class="text-center">
                 Данные о количестве спринтов<br />
@@ -117,7 +117,7 @@
               </v-layout>
             </v-card>
           </v-col>
-          <v-col cols="6" xs="12" sm="6" md="6" lg="4">
+          <v-col cols="12" xs="12" sm="6" md="6" lg="4">
             <v-card class="pa-2 d-print-none" height="100%">
               <h5 class="text-center">Действия</h5>
               <v-layout justify-content align-center fill-height>
@@ -284,10 +284,17 @@ export default {
   @page {
     margin: 1cm;
   }
-  .v-sheet.v-card:not(.v-sheet--outlined) {
-    box-shadow: unset !important;
-    width: 100%;
-    page-break-before: always;
+  // .v-sheet.v-card:not(.v-sheet--outlined) {
+  //   box-shadow: unset !important;
+
+  //   page-break-before: always;
+  // }
+  .col-12 {
+    width: 50% !important;
+    flex: unset !important;
+  }
+  .v-row {
+    display: flex;
   }
   *,
   *:before,
@@ -307,7 +314,7 @@ export default {
     text-align: center !important;
   }
   h1:before {
-    content: url(https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl=http://localhost:8000&choe=UTF-8);
+    content: url(https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl=http://localhost:8000/projects&choe=UTF-8);
     position: absolute;
     right: 0;
     bottom: 0;

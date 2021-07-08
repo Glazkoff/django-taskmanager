@@ -39,7 +39,7 @@
                 <v-btn
                   color="black"
                   icon
-                  v-if="status.id !== 0 && canAddStatuses"
+                  v-if="status.id !== 0 && isManagerOrAdmin"
                   @click="deleteStatus(status.id)"
                   ><v-icon>mdi-close</v-icon>
                 </v-btn>
@@ -51,7 +51,7 @@
                 text
                 block
                 class="mt-2"
-                :class="{ 'mt-5': status.id == 0 && canAddStatuses }"
+                :class="{ 'mt-5': status.id == 0 && isManagerOrAdmin }"
                 @click="addTask(status.id)"
               >
                 Добавить задачу</v-btn
@@ -88,7 +88,7 @@
           max-width="400"
           tile
           flat
-          v-if="canAddStatuses"
+          v-if="isManagerOrAdmin"
         >
           <v-banner color="white" sticky class="mb-4 pt-2">
             <!-- Новый статус задач -->
@@ -183,7 +183,7 @@ export default {
     };
   },
   computed: {
-    canAddStatuses() {
+    isManagerOrAdmin() {
       return this.$store.getters.isManager || this.$store.getters.isAdmin;
     },
     dragOptions() {

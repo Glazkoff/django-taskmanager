@@ -7,7 +7,13 @@
       <v-btn text link class="ml-4 d-none d-sm-flex" to="/">
         Список команд</v-btn
       >
-      <v-btn text link class="ml-2 d-none d-sm-flex" to="/projects">
+      <v-btn
+        text
+        link
+        class="ml-2 d-none d-sm-flex"
+        v-if="isAdmin"
+        to="/projects"
+      >
         Список проектов</v-btn
       >
       <v-spacer></v-spacer>
@@ -35,7 +41,9 @@
       <v-sheet color="grey lighten-4" class="pa-4">
         <v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar>
         <div>{{ name }}</div>
-        <div>{{ name }}</div>
+        <div v-if="isUser">Пользователь</div>
+        <div v-else-if="isManager">Менеджер</div>
+        <div v-else-if="isAdmin">Администратор</div>
       </v-sheet>
       <v-divider></v-divider>
       <v-list v-for="team in teams" :key="team.id">
@@ -90,24 +98,63 @@ export default {
   },
   data() {
     return {
-      drawer: false,
-      menuItems: [
-        {
-          title: "Список команд",
-          to: "/"
-        },
-        {
-          title: "Список проектов",
-          to: "/projects"
-        },
-        {
-          title: "Выйти",
-          to: "logout"
-        }
-      ]
+      drawer: false
+      // menuItems: [
+      //   {
+      //     title: "Список команд",
+      //     to: "/"
+      //   },
+      //   {
+      //     title: "Список проектов",
+      //     to: "/projects"
+      //   },
+      //   {
+      //     title: "Выйти",
+      //     to: "logout"
+      //   }
+      // ]
     };
   },
+
   computed: {
+    menuItems() {
+      if (this.isAdmin) {
+        return [
+          {
+            title: "Список команд",
+            to: "/"
+          },
+          {
+            title: "Список проектов",
+            to: "/projects"
+          },
+          {
+            title: "Выйти",
+            to: "logout"
+          }
+        ];
+      } else {
+        return [
+          {
+            title: "Список команд",
+            to: "/"
+          },
+          {
+            title: "Выйти",
+            to: "logout"
+          }
+        ];
+      }
+    },
+    isAdmin() {
+      return this.$store.getters.isAdmin;
+    },
+    isManager() {
+      return this.$store.getters.isManager;
+    },
+    isUser() {
+      return this.$store.getters.isUser;
+    },
     canBeDrawer() {
       return (
         this.$route.path != "/" &&

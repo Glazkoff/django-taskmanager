@@ -49,24 +49,18 @@
     </v-row>
     <v-row>
       <v-col col="12">
+        <v-btn
+          color="black"
+          class="mt-4 mb-4"
+          block
+          @click="startTeamAdding"
+          dark
+          outlined
+        >
+          Добавить новую команду
+        </v-btn>
         <v-simple-table width="100%">
           <template v-slot:default>
-            <thead>
-              <tr>
-                <td colspan="4">
-                  <v-btn
-                    color="black"
-                    class="mt-4 mb-4"
-                    block
-                    @click="startTeamAdding"
-                    dark
-                    outlined
-                  >
-                    Добавить новую команду</v-btn
-                  >
-                </td>
-              </tr>
-            </thead>
             <thead>
               <tr>
                 <th class="text-left">ID</th>
@@ -90,7 +84,7 @@
                       >Перейти к доске "{{ board.name }}"</v-btn
                     >
                   </div>
-                  <div>
+                  <div v-if="isManagerOrAdmin">
                     <v-btn
                       dark
                       color="black"
@@ -129,6 +123,9 @@ export default {
     }
   },
   computed: {
+    isManagerOrAdmin() {
+      return this.$store.getters.isManager || this.$store.getters.isAdmin;
+    },
     projectsToChoose() {
       if (this.projects != undefined) {
         return this.projects.filter((el) => {
