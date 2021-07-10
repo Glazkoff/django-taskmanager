@@ -48,6 +48,17 @@ const apolloProvider = new VueApollo({
   defaultClient: apolloClient
 });
 
+Vue.use(VueYandexMetrika, {
+  id: process.env.VUE_APP_YANDEX_METRIKA,
+  env: process.env.NODE_ENV,
+  router,
+  options: {
+    clickmap: true,
+    trackLinks: true,
+    accurateTrackBounce: true
+  }
+});
+
 new Vue({
   router,
   store,
