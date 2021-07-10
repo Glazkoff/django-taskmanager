@@ -240,6 +240,7 @@ export default {
         });
     },
     addTask(statusId) {
+      this.editTaskId = null;
       this.$refs.taskDialog.setStatusValue(statusId);
       this.addTaskStatusId = statusId;
       this.addTaskDialog = true;
