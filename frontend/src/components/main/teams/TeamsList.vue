@@ -21,7 +21,7 @@
         <span class="mr-2">Фильтровать команды проектов:</span>
         <v-btn
           color="black"
-          class="mr-2"
+          class="ma-1"
           v-for="project in projectsToChoose"
           :key="project.id"
           outlined
