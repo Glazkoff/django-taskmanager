@@ -113,11 +113,6 @@ class CreateTaskMutation(graphene.Mutation):
             executorObj = User.objects.get(pk=executor)
         sprintObj = Sprint.objects.get(pk=sprint)
         boardObj = Board.objects.get(pk=board)
-
-        print('STATUS')
-        print(status)
-        print(int(status) == 0)
-        print(status is None)
         if status is None or int(status) == 0:
             statusObj = None
         else:
@@ -143,11 +138,10 @@ class UpdateTaskMutation(graphene.Mutation):
     @classmethod
     def mutate(cls, root, info, body, story_points, task_id, sprint=None, executor=None, status=None):
         task = Task.objects.get(pk=task_id)
-
-        if (status != None):
+        if int(status) not in [None, 0]:
             statusObj = Status.objects.get(pk=status)
             task.status = statusObj
-        if (executor != None):
+        if int(executor) not in [None, 0]:
             executorObj = User.objects.get(pk=executor)
             task.executor = executorObj
         if (sprint != None):

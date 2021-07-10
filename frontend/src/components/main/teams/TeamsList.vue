@@ -76,7 +76,8 @@
                 <td>
                   <div v-for="(board, index) in team.boardSet" :key="board.id">
                     <v-btn
-                      color="primary"
+                      color="black"
+                      dark
                       class="mb-2"
                       :class="{ 'mt-2': index == 0 }"
                       :to="`/board/${board.id}`"

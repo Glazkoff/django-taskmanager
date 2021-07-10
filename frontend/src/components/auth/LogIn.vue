@@ -18,6 +18,7 @@
             :rules="[(value) => !!value || 'Поле обязательно']"
             @input="errorMessages = []"
             @blur="errorMessages = []"
+            outlined
           ></v-text-field>
           <v-text-field
             :disabled="formLoading"
@@ -33,6 +34,7 @@
             :rules="[(value) => !!value || 'Поле обязательно']"
             @input="errorMessages = []"
             @blur="errorMessages = []"
+            outlined
           ></v-text-field>
           <v-btn
             class="mt-8 my-button"

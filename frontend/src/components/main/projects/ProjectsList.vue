@@ -64,7 +64,7 @@
                   ({{ project.leader != null ? project.leader.username : "-" }})
                 </td>
                 <td>{{ project.prefix }}</td>
-                <td>{{ project.draft }}</td>
+                <td>{{ project.draft ? "Да" : "Нет" }}</td>
                 <td>
                   <div
                     v-for="(sprint, index) in project.sprintSet"

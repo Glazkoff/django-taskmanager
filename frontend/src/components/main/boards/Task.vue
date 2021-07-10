@@ -85,7 +85,7 @@
         <v-list-item-subtitle>{{
           task.executor != null
             ? `Исполнитель: ${task.executor.lastName} ${task.executor.firstName}`
-            : "Без исоплнителя"
+            : "Без исполнителя"
         }}</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>

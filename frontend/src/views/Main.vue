@@ -1,6 +1,6 @@
 <template>
   <v-app id="main">
-    <v-app-bar class="d-print-none" app>
+    <v-app-bar class="d-print-none" color="black" dark app>
       <v-app-bar-nav-icon @click="drawer = !drawer" v-if="canBeDrawer">
       </v-app-bar-nav-icon>
       <v-toolbar-title class="text-white">Таск-менеджер</v-toolbar-title>
