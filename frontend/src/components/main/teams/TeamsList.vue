@@ -56,6 +56,7 @@
           @click="startTeamAdding"
           dark
           outlined
+          v-if="isManagerOrAdmin"
         >
           Добавить новую команду
         </v-btn>
