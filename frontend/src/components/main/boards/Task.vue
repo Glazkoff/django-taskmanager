@@ -82,14 +82,11 @@
         <v-list-item-subtitle>{{
           task.sprint != null ? `Спринт "${task.sprint.name}"` : "Без спринта"
         }}</v-list-item-subtitle>
-        <v-list-item-subtitle
-          >{{ JSON.stringify(task.executor)
-          }}{{
-            task.executor != null && task.executor != 0
-              ? `Исполнитель: ${task.executor.lastName} ${task.executor.firstName}`
-              : "Без исполнителя"
-          }}</v-list-item-subtitle
-        >
+        <v-list-item-subtitle>{{
+          task.executor != null && task.executor != 0
+            ? `Исполнитель: ${task.executor.lastName} ${task.executor.firstName}`
+            : "Без исполнителя"
+        }}</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
 
