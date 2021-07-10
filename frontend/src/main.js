@@ -56,7 +56,9 @@ Vue.use(VueYandexMetrika, {
   options: {
     clickmap: true,
     trackLinks: true,
-    accurateTrackBounce: true
+    accurateTrackBounce: true,
+    webvisor:true,
+    trackHash:true
   }
 });
 
