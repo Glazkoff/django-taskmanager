@@ -9,6 +9,7 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 import { createHttpLink } from "apollo-link-http";
 import vuetify from "./plugins/vuetify";
 import Cookies from "js-cookie";
+import VueYandexMetrika from "vue-yandex-metrika";
 
 Vue.config.productionTip = false;
 
