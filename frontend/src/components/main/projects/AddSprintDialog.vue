@@ -101,6 +101,13 @@ export default {
           }
         })
         .then(() => {
+          this.sprint = {
+            name: null,
+            aim: null,
+            project: null,
+            startDate: null,
+            finishDate: null
+          };
           this.$emit("refresh");
           this.$emit("close");
         })

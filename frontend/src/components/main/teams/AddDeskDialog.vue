@@ -64,6 +64,10 @@ export default {
           }
         })
         .then(() => {
+          this.desk = {
+            name: null,
+            team: null
+          };
           this.$emit("refresh");
           this.$emit("close");
         })

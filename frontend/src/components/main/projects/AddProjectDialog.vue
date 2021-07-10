@@ -111,6 +111,16 @@ export default {
           }
         })
         .then(() => {
+          this.project = {
+            name: null,
+            leader: null,
+            prefix: null,
+            settings: {
+              teamCount: null,
+              sprintCount: null
+            },
+            teams: []
+          };
           this.$emit("refresh");
           this.$emit("close");
         })

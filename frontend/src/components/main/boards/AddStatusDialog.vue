@@ -43,7 +43,9 @@ export default {
             statusName: this.statusName
           }
         })
-        .then(() => {})
+        .then(() => {
+          this.statusName = "";
+        })
         .catch((e) => {
           console.log(e);
         })
