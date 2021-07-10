@@ -39,8 +39,10 @@
       v-if="canBeDrawer"
     >
       <v-sheet color="grey lighten-4" class="pa-4">
-        <v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar>
-        <div>{{ name }}</div>
+        <!-- <v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar> -->
+        <div>
+          <h3>{{ name }}</h3>
+        </div>
         <div v-if="isUser">Пользователь</div>
         <div v-else-if="isManager">Менеджер</div>
         <div v-else-if="isAdmin">Администратор</div>
