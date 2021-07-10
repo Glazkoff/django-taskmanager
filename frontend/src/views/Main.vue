@@ -166,7 +166,7 @@ export default {
       let user = localStorage.getItem("user");
       if (user) {
         let parseUsr = JSON.parse(user);
-        return parseUsr.user.firstName + parseUsr.user.lastName;
+        return parseUsr.user.firstName + " " + parseUsr.user.lastName;
       } else return "-";
     },
     username() {
