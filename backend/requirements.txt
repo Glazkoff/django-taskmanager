@@ -8,3 +8,4 @@ django-import-export
 graphene-django
 gunicorn==20.1.0
 gevent==21.1.2
+setuptools>=65.5.1 # not directly required, pinned by Snyk to avoid a vulnerability
